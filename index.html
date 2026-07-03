@@ -51,16 +51,15 @@ a{color:inherit;text-decoration:none}
     url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.09' numOctaves='5' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.30  0 0 0 0 0.12  0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23r)'/%3E%3C/svg%3E");
 }
 
-/* ============ LOADER ============ */
-#loader{
-  position:fixed;inset:0;z-index:10000;background:#0e0d0b;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;
-  transition:opacity .9s ease, visibility .9s;
+/* ============ MLHA — místo loaderu se stránka proostří ============ */
+#mlha{
+  position:fixed;inset:0;z-index:10000;pointer-events:none;
+  backdrop-filter:blur(26px) saturate(1.3);
+  -webkit-backdrop-filter:blur(26px) saturate(1.3);
+  background:rgba(14,13,11,.42);
+  transition:opacity 1.4s ease, visibility 1.4s;
 }
-#loader.done{opacity:0;visibility:hidden}
-#loader .stroke{width:min(300px,60vw);height:4px;background:#2a251e;border-radius:2px;overflow:hidden}
-#loader .stroke i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#8a4a2b,#d4a24c,#e8c987);border-radius:2px}
-#loader .sig{font-family:var(--hand);font-size:2rem;color:#d4a24c;opacity:.9}
+#mlha.pryc{opacity:0;visibility:hidden}
 
 /* ============ NAVIGACE ============ */
 nav{
@@ -460,10 +459,7 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 </head>
 <body>
 
-<div id="loader">
-  <div class="sig">Miloš Kotek</div>
-  <div class="stroke"><i></i></div>
-</div>
+<div id="mlha"></div>
 
 <div id="zrno"></div>
 <div id="koroze"></div>
@@ -988,17 +984,17 @@ function jmeno(){
   }, 460);
 }
 
-/* ============ LOADER + INTRO ============ */
+/* ============ MLHA + INTRO — stránka se proostří ============ */
 function intro(){
-  var loader = document.getElementById('loader');
+  var mlha = document.getElementById('mlha');
+  mlha.classList.add('pryc');
   if (!hasGsap){
-    loader.classList.add('done');
+    document.querySelectorAll('h1.hero-name .line span').forEach(function(el){el.style.transform='none';});
+    document.querySelectorAll('.reveal').forEach(function(el){el.style.opacity=1;el.style.transform='none';});
     return;
   }
-  var tl = gsap.timeline();
-  tl.to(loader.querySelector('.stroke i'), {width:'100%', duration:1.1, ease:'power2.inOut'})
-    .add(function(){ loader.classList.add('done'); })
-    .to('h1.hero-name .line span', {y:0, duration:1.2, ease:'power4.out', stagger:0.12}, '+=0.15')
+  var tl = gsap.timeline({delay:0.25});
+  tl.to('h1.hero-name .line span', {y:0, duration:1.2, ease:'power4.out', stagger:0.12})
     .from('.hero-kicker', {opacity:0, y:16, duration:0.8}, '-=0.8')
     .from('.hero-sub', {opacity:0, y:14, duration:0.8}, '-=0.6')
     .from('.hero-scroll', {opacity:0, duration:0.9}, '-=0.4');
@@ -1270,9 +1266,9 @@ window.addEventListener('load', function(){
   if (hasGsap) ScrollTrigger.refresh();
 });
 setTimeout(function(){
-  var l = document.getElementById('loader');
-  if (l && !l.classList.contains('done')) l.classList.add('done');
-}, 3500);
+  var m = document.getElementById('mlha');
+  if (m && !m.classList.contains('pryc')) m.classList.add('pryc');
+}, 3000);
 })();
 </script>
 </body>
