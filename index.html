@@ -302,13 +302,12 @@ h2.title em{font-style:italic;color:var(--akcent);font-weight:300}
 /* ============ PROJEKTY — reference ============ */
 .proj-list{margin-top:3.5rem;border-top:1px solid rgba(239,233,223,.14)}
 .proj-radek{
-  display:grid;grid-template-columns:auto 1fr auto;align-items:center;
+  display:grid;grid-template-columns:1fr auto;align-items:center;
   gap:clamp(1rem,3vw,2.5rem);padding:clamp(1.6rem,4vh,2.6rem) .2rem;
   border-bottom:1px solid rgba(239,233,223,.14);
   transition:padding-left .5s cubic-bezier(.16,1,.3,1);
 }
 .proj-radek:hover{padding-left:1.4rem}
-.proj-radek .idx{font-size:.72rem;letter-spacing:.2em;color:var(--akcent);opacity:.7}
 .proj-radek .nazev{
   font-family:var(--serif);font-weight:600;
   font-size:clamp(1.5rem,4.2vw,3.2rem);line-height:1.05;
@@ -318,8 +317,8 @@ h2.title em{font-style:italic;color:var(--akcent);font-weight:300}
 .proj-radek:hover .nazev{color:var(--akcent)}
 .proj-radek .obor{font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);text-align:right}
 @media(max-width:700px){
-  .proj-radek{grid-template-columns:auto 1fr}
-  .proj-radek .obor{grid-column:2;text-align:left;letter-spacing:.18em}
+  .proj-radek{grid-template-columns:1fr}
+  .proj-radek .obor{text-align:left;letter-spacing:.18em}
 }
 .proj-logo{
   height:clamp(2rem,4.5vw,3rem);width:auto;display:inline-block;
@@ -596,17 +595,14 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
     <p class="lead reveal">Výběr z prací, kterými prošel jeho štětec — od restaurací přes muzejní expozice po filmové kulisy.</p>
     <div class="proj-list">
       <div class="proj-radek reveal">
-        <span class="idx">01</span>
         <span class="nazev"><span class="proj-logo" id="bbLogo"><img src="assets/bb-logo.svg" alt="Bageterie Boulevard" onerror="this.parentNode.remove()"></span>Bageterie Boulevard</span>
         <span class="obor">písmomalířské práce</span>
       </div>
       <div class="proj-radek reveal">
-        <span class="idx">02</span>
         <span class="nazev">Muzeum Harryho Pottera</span>
         <span class="obor">kulisy &amp; patina</span>
       </div>
       <div class="proj-radek reveal">
-        <span class="idx">03</span>
         <span class="nazev">Blade Runner</span>
         <span class="obor">filmová patina</span>
       </div>
