@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0e0d0b">
+<title>Miloš Kotek — mistr štětce | malba · písmo · patina</title>
+<meta name="description" content="Miloš Kotek — padesát let u štětce. Autorská malba, ručně malované písmo, patinérství u filmu a zakázková malba.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,700&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;600&display=swap&subset=latin-ext" rel="stylesheet">
+<style>
+/* ============ TÉMA — celá stránka se přebarvuje ============ */
+:root{
+  --bg:#0e0d0b;           /* animuje se GSAPem podle dějství */
+  --fg:#efe9df;
+  --dim:#b0a695;
+  --akcent:#d4a24c;
+  --zrno:0.4;             /* intenzita filmového zrna */
+  --serif:'Fraunces', Georgia, serif;
+  --sans:'Inter', -apple-system, sans-serif;
+  --hand:'Caveat', cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--sans);
+  font-weight:300;
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  transition:none;
+}
+::selection{background:var(--akcent);color:var(--bg)}
+a{color:inherit;text-decoration:none}
+
+/* filmové zrno — houstne s patinou */
+#zrno{
+  position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:var(--zrno);
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.07'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* koroze celé stránky — probouzí ji dějství Patina */
+#koroze{
+  position:fixed;inset:0;pointer-events:none;z-index:9991;opacity:0;
+  mix-blend-mode:soft-light;
+  background:
+    radial-gradient(circle at 15% 20%, #a0522d, transparent 40%),
+    radial-gradient(circle at 80% 70%, #6e3a1c, transparent 45%),
+    radial-gradient(circle at 50% 95%, #8a4a2b, transparent 35%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.09' numOctaves='5' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.30  0 0 0 0 0.12  0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23r)'/%3E%3C/svg%3E");
+}
+
+/* ============ LOADER ============ */
+#loader{
+  position:fixed;inset:0;z-index:10000;background:#0e0d0b;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;
+  transition:opacity .9s ease, visibility .9s;
+}
+#loader.done{opacity:0;visibility:hidden}
+#loader .stroke{width:min(300px,60vw);height:4px;background:#2a251e;border-radius:2px;overflow:hidden}
+#loader .stroke i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#8a4a2b,#d4a24c,#e8c987);border-radius:2px}
+#loader .sig{font-family:var(--hand);font-size:2rem;color:#d4a24c;opacity:.9}
+
+/* ============ NAVIGACE ============ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.4rem clamp(1.2rem,4vw,3rem);
+  transition:transform .4s ease;
+}
+nav.hidden{transform:translateY(-110%)}
+body.menu-open nav{transform:none}
+nav .logo{font-family:var(--serif);font-weight:600;font-size:1.05rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fg)}
+nav .links{display:flex;gap:1.8rem;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--fg)}
+nav .links a{opacity:.7;transition:opacity .25s}
+nav .links a:hover{opacity:1}
+@media(max-width:760px){nav .links{display:none}}
+
+/* mobilní menu */
+.burger{
+  display:none;background:none;border:none;cursor:pointer;padding:.6rem;
+  flex-direction:column;gap:6px;z-index:1002;
+}
+.burger span{display:block;width:26px;height:2px;background:var(--fg);transition:.35s ease}
+body.menu-open .burger span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+body.menu-open .burger span:nth-child(2){transform:translateY(-0px) rotate(-45deg);margin-top:6px}
+@media(max-width:760px){.burger{display:flex}}
+#mobmenu{
+  position:fixed;inset:0;z-index:1001;background:rgba(14,13,11,.97);
+  display:flex;flex-direction:column;justify-content:center;gap:.4rem;
+  padding:0 2rem;opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s;
+}
+body.menu-open #mobmenu{opacity:1;visibility:visible}
+#mobmenu a{
+  font-family:var(--serif);font-weight:600;font-size:2rem;padding:.55rem 0;
+  border-bottom:1px solid rgba(239,233,223,.1);
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+#mobmenu a .mn{font-family:var(--sans);font-size:.7rem;letter-spacing:.25em;color:var(--akcent)}
+body.menu-open{overflow:hidden}
+
+/* ============ NIT — svislá linka propojující celý web ============ */
+#nit{
+  position:fixed;right:clamp(1rem,3vw,2.4rem);top:50%;transform:translateY(-50%);
+  z-index:900;display:flex;flex-direction:column;align-items:center;gap:1rem;
+}
+#nit .cara{width:1px;height:34vh;background:rgba(239,233,223,.14);position:relative;overflow:hidden}
+#nit .cara i{position:absolute;top:0;left:0;width:100%;height:100%;background:var(--akcent);transform:scaleY(0);transform-origin:top}
+#nit .stitek{
+  writing-mode:vertical-rl;font-size:.66rem;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--dim);white-space:nowrap;transition:opacity .4s;
+}
+@media(max-width:760px){#nit{display:none}}
+
+/* ============ HERO ============ */
+#hero{position:relative;height:100vh;height:100svh;overflow:hidden}
+#hero canvas{position:absolute;inset:0}
+#hero .inner{
+  position:relative;z-index:2;height:100%;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+  padding:0 1rem;pointer-events:none;
+}
+.hero-kicker{font-size:clamp(.7rem,1.4vw,.85rem);letter-spacing:.5em;text-transform:uppercase;color:var(--akcent);margin-bottom:1.6rem}
+h1.hero-name{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(3rem,12vw,10.5rem);line-height:.95;letter-spacing:-.01em;color:var(--fg);
+  pointer-events:auto;cursor:default;
+}
+h1.hero-name .line{display:block;overflow:hidden}
+h1.hero-name .line span{display:inline-block;transform:translateY(110%)}
+/* písmena — přelévají se mezi žlutou a černou */
+h1.hero-name .pis{
+  font-style:normal;color:#e6b83c;
+  -webkit-text-stroke:1.5px rgba(230,184,60,0);
+  transition:color .55s ease, -webkit-text-stroke-color .55s ease;
+}
+h1.hero-name .pis.cerna{
+  color:#0b0a08;
+  -webkit-text-stroke-color:rgba(230,184,60,.95);
+}
+/* hover — žluto-černé pruhy jak výstražná páska, jedou šikmo */
+h1.hero-name:hover .pis{
+  background:repeating-linear-gradient(180deg,#e6b83c 0 .13em,#0b0a08 .13em .26em);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke-color:rgba(230,184,60,.55);
+  animation:pruhy 1.1s linear infinite;
+}
+@keyframes pruhy{to{background-position:0 .52em}}
+.hero-sub{
+  margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;
+  font-size:clamp(.75rem,1.6vw,.95rem);letter-spacing:.22em;text-transform:uppercase;color:var(--dim);
+}
+.hero-sub i{font-style:normal;color:var(--akcent);opacity:.8}
+.hero-scroll{
+  position:absolute;bottom:2.2rem;left:50%;transform:translateX(-50%);
+  font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);
+  display:flex;flex-direction:column;align-items:center;gap:.7rem;
+}
+.hero-scroll::after{
+  content:'';width:1px;height:44px;background:linear-gradient(var(--akcent),transparent);
+  animation:drip 2.2s ease-in-out infinite;
+}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}56%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ============ SPOLEČNÉ ============ */
+section{position:relative}
+.wrap{max-width:1200px;margin:0 auto;padding:clamp(5rem,12vh,9rem) clamp(1.2rem,5vw,3rem)}
+.kicker{
+  display:flex;align-items:center;gap:1rem;
+  font-size:.72rem;letter-spacing:.4em;text-transform:uppercase;color:var(--akcent);margin-bottom:1.4rem;
+}
+.kicker::before{content:'';width:42px;height:1px;background:var(--akcent)}
+.kicker .num{opacity:.55;letter-spacing:.15em}
+h2.title{font-family:var(--serif);font-weight:600;font-size:clamp(2.2rem,6vw,4.6rem);line-height:1.05;margin-bottom:1.8rem}
+h2.title em{font-style:italic;color:var(--akcent);font-weight:300}
+.lead{max-width:56ch;font-size:clamp(1rem,1.6vw,1.15rem);color:var(--dim)}
+.lead strong{color:var(--fg);font-weight:500}
+.reveal{opacity:0;transform:translateY(40px)}
+
+/* ============ MANIFEST — mistr svého řemesla ============ */
+#manifest{height:380vh}
+#manifest .lepka{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:hidden;text-align:center}
+#manifest .uvod{font-size:clamp(.75rem,1.5vw,.9rem);letter-spacing:.45em;text-transform:uppercase;color:var(--dim);margin-bottom:2.2rem}
+#manifest .slova{position:relative;width:100%;height:clamp(5rem,16vw,13rem)}
+#manifest .slovo{
+  position:absolute;inset:0;display:flex;justify-content:center;align-items:center;
+  font-family:var(--serif);font-weight:900;text-transform:uppercase;
+  font-size:clamp(3.2rem,13vw,11rem);line-height:1;letter-spacing:-.01em;
+  opacity:0;
+}
+#manifest .slovo.dlouhe{font-size:clamp(2.2rem,9.5vw,8rem)}
+#manifest .slovo .obrys{-webkit-text-stroke:1.5px var(--fg);color:transparent}
+#manifest .slovo .plny{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;color:var(--akcent);clip-path:inset(100% 0 0 0)}
+#manifest .portret{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  height:82%;aspect-ratio:1022/1300;max-width:88vw;
+  opacity:0;z-index:0;border-radius:3px;overflow:hidden;
+  box-shadow:0 40px 100px -20px rgba(0,0,0,.85);
+}
+#manifest .portret img{width:100%;height:100%;object-fit:cover;display:block}
+#manifest .portret::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(rgba(14,13,11,.6),rgba(14,13,11,.25) 40%,rgba(14,13,11,.72));
+}
+#manifest .uvod,#manifest .slova,#manifest .veta,#manifest .pocitadlo{position:relative;z-index:2}
+#manifest .veta{
+  margin-top:2.4rem;font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:clamp(1.1rem,2.6vw,1.7rem);color:var(--dim);
+}
+#manifest .veta strong{color:var(--fg);font-weight:600;font-style:normal}
+#manifest .pocitadlo{
+  position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);
+  font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);
+}
+
+/* ============ DÍLNA — tři dějství v jednom rámu ============ */
+#dilna .ram{height:100vh;height:100svh;position:relative;overflow:hidden}
+.akt{
+  position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(4.5rem,10vh,7rem) clamp(1.2rem,6vw,4rem) clamp(2rem,6vh,4rem);
+}
+.akt .kicker{margin-bottom:1rem}
+.akt h3{
+  font-family:var(--serif);font-weight:600;
+  font-size:clamp(2rem,5.4vw,4.2rem);line-height:1.02;margin-bottom:1.2rem;
+}
+.akt h3 em{font-style:italic;font-weight:300}
+.akt .text{max-width:52ch;color:var(--dim);font-size:clamp(.92rem,1.5vw,1.1rem)}
+.akt .text strong{color:var(--fg);font-weight:500}
+
+/* dějství I — MALBA */
+#akt-malba{background:
+  radial-gradient(ellipse 80% 60% at 85% 15%, rgba(177,58,46,.22), transparent 55%),
+  radial-gradient(ellipse 60% 50% at 10% 90%, rgba(46,74,104,.2), transparent 55%),
+  #140e0c;}
+.malba-scena{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(1.5rem,4vw,4rem);align-items:center;height:100%}
+@media(max-width:860px){.malba-scena{grid-template-columns:1fr;align-content:center}}
+.platna{position:relative;height:min(62vh,560px)}
+@media(max-width:860px){.platna{height:38vh}}
+.platno-k{
+  position:absolute;border-radius:2px;overflow:hidden;
+  box-shadow:0 30px 70px -18px rgba(0,0,0,.85);
+  background-size:cover;background-position:center;
+}
+.platno-k::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(239,233,223,.08)}
+.pk1{width:50%;aspect-ratio:3/4;left:0;top:4%;background-image:url('assets/malba-strazce.jpg');z-index:3}
+.pk2{width:42%;aspect-ratio:1/1;right:8%;top:0;background-image:url('assets/malba-spirala.jpg');z-index:2}
+.pk3{width:46%;aspect-ratio:4/3;right:0;bottom:0;background-image:url('assets/malba-akvarel.jpg');z-index:1}
+.malba-pozn{font-family:var(--hand);font-size:1.25rem;color:var(--akcent);margin-top:1.4rem;opacity:.85}
+
+/* ============ MEZIHRA — stropní malby ============ */
+#mezihra{height:72vh;position:relative;overflow:hidden}
+#mezihra .mez-bg{position:absolute;inset:0}
+#mezihra .mez-bg img{width:100%;height:130%;object-fit:cover;object-position:center 30%}
+#mezihra::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(rgba(14,13,11,.86),rgba(14,13,11,.25) 45%,rgba(14,13,11,.9));
+}
+#mezihra .mez-txt{
+  position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 clamp(1.2rem,6vw,4rem) clamp(2.5rem,7vh,4.5rem);
+}
+#mezihra .mez-txt .kicker{margin-bottom:.8rem}
+#mezihra h2{
+  font-family:var(--serif);font-weight:600;
+  font-size:clamp(1.8rem,4.6vw,3.6rem);line-height:1.08;max-width:20ch;
+}
+#mezihra h2 em{font-style:italic;color:var(--akcent);font-weight:300}
+
+/* dějství II — PÍSMO */
+#akt-pismo{background:radial-gradient(ellipse 100% 80% at 50% 0%,#18271f,#0f1d16 70%);align-items:center;text-align:center;clip-path:circle(0% at 78% 40%)}
+#akt-pismo svg.napis{width:min(720px,90vw);height:auto;margin:2.2rem 0 1.4rem;overflow:visible}
+#akt-pismo svg.napis text{font-family:var(--hand);font-size:118px;font-weight:600;fill:none;stroke:#e8c987;stroke-width:1.6}
+#akt-pismo .text{margin:0 auto}
+.pismo-radky{display:flex;gap:clamp(1.4rem,4vw,3.5rem);margin-top:2.4rem;flex-wrap:wrap;justify-content:center}
+.pismo-radky span{font-size:.75rem;letter-spacing:.28em;text-transform:uppercase;color:#a8b2a4;border-top:1px solid rgba(232,201,135,.3);padding-top:.8rem}
+
+/* dějství III — PATINA */
+#akt-patina{background:linear-gradient(#0d0c0a,#17100a);align-items:center;text-align:center;clip-path:circle(0% at 22% 65%)}
+.patina-title{
+  font-family:var(--serif);font-weight:900;text-transform:uppercase;
+  font-size:clamp(3rem,13vw,11rem);line-height:.92;color:var(--fg);position:relative;
+}
+.patina-title .vrstva-rez{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 20% 30%,#a0522d,transparent 35%),
+    radial-gradient(circle at 70% 60%,#6e3a1c,transparent 40%),
+    radial-gradient(circle at 45% 80%,#8a4a2b,transparent 30%),
+    linear-gradient(#7a4526,#3d2210);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  opacity:0;filter:url(#rezFiltr);
+}
+#akt-patina .text{margin:2rem auto 0}
+
+/* ============ ZAKÁZKA ============ */
+#zakazka .wrap{text-align:center}
+#zakazka .kicker{justify-content:center}
+#zakazka .lead{margin:0 auto}
+/* ============ PROJEKTY — reference ============ */
+.proj-list{margin-top:3.5rem;border-top:1px solid rgba(239,233,223,.14)}
+.proj-radek{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;
+  gap:clamp(1rem,3vw,2.5rem);padding:clamp(1.6rem,4vh,2.6rem) .2rem;
+  border-bottom:1px solid rgba(239,233,223,.14);
+  transition:padding-left .5s cubic-bezier(.16,1,.3,1);
+}
+.proj-radek:hover{padding-left:1.4rem}
+.proj-radek .idx{font-size:.72rem;letter-spacing:.2em;color:var(--akcent);opacity:.7}
+.proj-radek .nazev{
+  font-family:var(--serif);font-weight:600;
+  font-size:clamp(1.5rem,4.2vw,3.2rem);line-height:1.05;
+  display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;
+  transition:color .3s;
+}
+.proj-radek:hover .nazev{color:var(--akcent)}
+.proj-radek .obor{font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);text-align:right}
+@media(max-width:700px){
+  .proj-radek{grid-template-columns:auto 1fr}
+  .proj-radek .obor{grid-column:2;text-align:left;letter-spacing:.18em}
+}
+.proj-logo{
+  height:clamp(2rem,4.5vw,3rem);width:auto;display:inline-block;
+  background:var(--fg);border-radius:6px;padding:.4rem .7rem;
+}
+.proj-logo img{height:100%;width:auto;display:block}
+.proj-pozn{margin-top:2rem;font-size:.85rem;color:var(--dim)}
+
+.zak-ukazky{display:flex;justify-content:center;gap:clamp(1.2rem,4vw,3rem);margin-top:3.5rem;flex-wrap:wrap}
+.zak-foto{
+  width:min(320px,72vw);border-radius:2px;overflow:hidden;position:relative;
+  box-shadow:0 26px 60px -18px rgba(0,0,0,.8);
+  transition:transform .6s cubic-bezier(.16,1,.3,1);
+}
+.zak-foto img{width:100%;display:block}
+.zak-foto:nth-child(1){transform:rotate(-3deg)}
+.zak-foto:nth-child(2){transform:rotate(2.4deg) translateY(14px)}
+.zak-foto:hover{transform:rotate(0) scale(1.03);z-index:2}
+.zak-foto .pop{
+  position:absolute;left:0;right:0;bottom:0;padding:.8rem 1rem;
+  background:linear-gradient(transparent,rgba(10,9,7,.85));
+  font-family:var(--hand);font-size:1.15rem;color:var(--akcent);text-align:left;
+}
+.cta{
+  display:inline-flex;align-items:center;gap:.9rem;margin-top:3rem;
+  font-family:var(--serif);font-size:1.1rem;font-weight:600;letter-spacing:.04em;
+  color:#0e0d0b;background:var(--akcent);padding:1.1rem 2.4rem;border-radius:60px;
+  box-shadow:0 14px 40px -12px rgba(212,162,76,.45);
+  will-change:transform;
+}
+.cta svg{width:18px;height:18px}
+
+/* ============ CENÍK ============ */
+.cenik-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:3.5rem}
+@media(max-width:900px){.cenik-grid{grid-template-columns:1fr}}
+.cena-karta{
+  border:1px solid rgba(239,233,223,.12);border-radius:4px;padding:2.2rem 1.9rem;
+  background:linear-gradient(170deg,rgba(239,233,223,.035),transparent 55%);
+  display:flex;flex-direction:column;transition:border-color .35s,transform .35s;
+}
+.cena-karta:hover{border-color:rgba(212,162,76,.5);transform:translateY(-4px)}
+.cena-karta.zvyraznena{border-color:var(--akcent);background:linear-gradient(170deg,rgba(212,162,76,.09),transparent 60%)}
+.cena-karta .typ{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--akcent);margin-bottom:1rem}
+.cena-karta h3{font-family:var(--serif);font-weight:600;font-size:1.5rem;margin-bottom:.4rem}
+.cena-karta .cena{font-family:var(--serif);font-size:2rem;font-weight:300;color:var(--akcent);margin:.8rem 0 1.2rem}
+.cena-karta .cena small{font-size:.85rem;color:var(--dim);font-family:var(--sans)}
+.cena-karta ul{list-style:none;display:flex;flex-direction:column;gap:.55rem;font-size:.88rem;color:var(--dim);margin-bottom:1.5rem}
+.cena-karta ul li::before{content:'—';color:var(--akcent);margin-right:.6rem}
+.cenik-pozn{margin-top:2rem;font-size:.85rem;color:var(--dim);text-align:center}
+
+/* ============ FAQ ============ */
+.faq-list{margin-top:3rem;border-top:1px solid rgba(239,233,223,.12)}
+.faq-item{border-bottom:1px solid rgba(239,233,223,.12)}
+.faq-q{
+  width:100%;background:none;border:none;color:var(--fg);cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;gap:1.5rem;
+  padding:1.6rem .2rem;text-align:left;
+  font-family:var(--serif);font-size:clamp(1.05rem,2.2vw,1.35rem);font-weight:400;
+  transition:color .3s;
+}
+.faq-q:hover{color:var(--akcent)}
+.faq-q .plus{
+  flex:none;width:34px;height:34px;border:1px solid rgba(239,233,223,.3);border-radius:50%;
+  position:relative;transition:transform .45s cubic-bezier(.16,1,.3,1),border-color .3s;
+}
+.faq-q .plus::before,.faq-q .plus::after{
+  content:'';position:absolute;top:50%;left:50%;background:currentColor;
+  width:12px;height:1.5px;transform:translate(-50%,-50%);
+}
+.faq-q .plus::after{transform:translate(-50%,-50%) rotate(90deg)}
+.faq-item.open .plus{transform:rotate(135deg);border-color:var(--akcent)}
+.faq-a{max-height:0;overflow:hidden}
+.faq-a p{padding:0 .2rem 1.7rem;max-width:62ch;color:var(--dim);font-size:.95rem}
+
+/* ============ KONTAKT ============ */
+#kontakt{overflow:hidden}
+#kontakt .wrap{padding-bottom:3rem}
+.kontakt-hlavni{margin-top:3rem;display:flex;flex-direction:column;gap:.5rem}
+.kontakt-radek{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(1.6rem,5.5vw,4.2rem);line-height:1.15;
+  display:inline-flex;align-items:baseline;gap:1.2rem;flex-wrap:wrap;
+  width:fit-content;position:relative;
+}
+.kontakt-radek .lbl{font-family:var(--sans);font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--akcent)}
+.kontakt-radek .val{position:relative}
+.kontakt-radek .val::after{
+  content:'';position:absolute;left:0;bottom:.06em;width:100%;height:.08em;
+  background:var(--akcent);transform:scaleX(0);transform-origin:left;
+  transition:transform .6s cubic-bezier(.16,1,.3,1);
+}
+.kontakt-radek:hover .val::after{transform:scaleX(1)}
+footer{
+  border-top:1px solid rgba(239,233,223,.1);margin-top:5rem;padding:2rem clamp(1.2rem,5vw,3rem);
+  display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;
+  font-size:.78rem;color:var(--dim);
+}
+footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
+
+/* ============ MOBIL & TABLET — doladění ============ */
+@media(max-width:760px){
+  #manifest .portret{height:auto;width:min(80vw,58vh)}
+  #manifest .veta{padding:0 1.2rem}
+  #mezihra{height:52vh}
+  .kontakt-radek{gap:.6rem}
+}
+@media(max-width:560px){
+  .akt{padding:4.4rem 1.1rem 1.4rem}
+  .akt h3{font-size:1.65rem}
+  .akt .text{font-size:.88rem}
+  .malba-scena{gap:1rem}
+  .platna{height:32vh}
+  .malba-pozn{font-size:1.05rem;margin-top:.8rem}
+  #akt-pismo svg.napis{margin:1.2rem 0 .8rem}
+  .pismo-radky{gap:.9rem;margin-top:1.4rem}
+  .pismo-radky span{font-size:.62rem;padding-top:.5rem}
+  #akt-patina .text{margin-top:1.2rem}
+  .zak-foto{width:min(240px,78vw)}
+  .zak-foto:nth-child(2){transform:rotate(2.4deg)}
+  footer{justify-content:center;text-align:center}
+}
+@media(max-height:600px) and (orientation:landscape){
+  .akt h3{font-size:1.5rem}
+  .platna{height:52vh}
+  #akt-pismo svg.napis{width:min(420px,70vw);margin:.8rem 0 .6rem}
+}
+
+/* ============ STATICKÝ REŽIM (bez animací / reduced motion) ============ */
+.staticky#manifest{height:auto}
+.staticky#manifest .lepka{position:relative;height:auto;padding:6rem 1.5rem}
+.staticky#manifest .slovo{display:none}
+.staticky#manifest .slovo[data-slovo="3"]{display:flex;position:relative;opacity:1}
+.staticky#manifest .slovo[data-slovo="3"] .plny{clip-path:none}
+.staticky#manifest .portret{position:relative;top:auto;left:auto;transform:none;opacity:1;height:auto;width:min(420px,80vw);margin:2rem auto}
+.staticky#dilna .ram{height:auto;overflow:visible}
+.staticky#dilna .akt{position:relative;clip-path:none!important;min-height:100vh}
+.staticky .reveal{opacity:1!important;transform:none!important}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="sig">Miloš Kotek</div>
+  <div class="stroke"><i></i></div>
+</div>
+
+<div id="zrno"></div>
+<div id="koroze"></div>
+
+<svg width="0" height="0" style="position:absolute">
+  <filter id="rezFiltr">
+    <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="4" seed="7" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" id="rezDisplace"/>
+  </filter>
+</svg>
+
+<nav id="nav">
+  <a class="logo" href="#hero">M. Kotek</a>
+  <div class="links">
+    <a href="#manifest">Mistr</a>
+    <a href="#dilna">Řemesla</a>
+    <a href="#projekty">Projekty</a>
+    <a href="#zakazka">Zakázka</a>
+    <a href="#cenik">Ceník</a>
+    <a href="#faq">Otázky</a>
+    <a href="#kontakt">Kontakt</a>
+  </div>
+  <button class="burger" id="burger" aria-label="Otevřít menu"><span></span><span></span></button>
+</nav>
+
+<div id="mobmenu">
+  <a href="#manifest">Mistr<span class="mn">02</span></a>
+  <a href="#dilna">Řemesla<span class="mn">03</span></a>
+  <a href="#projekty">Projekty<span class="mn">06</span></a>
+  <a href="#zakazka">Zakázka<span class="mn">07</span></a>
+  <a href="#cenik">Ceník<span class="mn">08</span></a>
+  <a href="#faq">Otázky<span class="mn">09</span></a>
+  <a href="#kontakt">Kontakt<span class="mn">10</span></a>
+</div>
+
+<!-- NIT — propojuje celý web, roste se scrollem -->
+<div id="nit">
+  <div class="stitek" id="nitStitek">ateliér</div>
+  <div class="cara"><i id="nitCara"></i></div>
+</div>
+
+<!-- 01 ATELIÉR -->
+<section id="hero" data-theme="ink" data-stitek="ateliér">
+  <canvas id="platno"></canvas>
+  <div class="inner">
+    <div class="hero-kicker">Padesát let u štětce</div>
+    <h1 class="hero-name">
+      <span class="line"><span>Miloš</span></span>
+      <span class="line"><span>Kotek</span></span>
+    </h1>
+    <div class="hero-sub">
+      <span>malba</span><i>·</i><span>písmo</span><i>·</i><span>patina</span><i>·</i><span>zakázky</span>
+    </div>
+  </div>
+  <div class="hero-scroll">vstupte do dílny</div>
+</section>
+
+<!-- 02 MANIFEST — mistr svého řemesla -->
+<section id="manifest" data-theme="ink" data-stitek="mistr">
+  <div class="lepka">
+    <div class="portret" id="portret"><img src="assets/portret.jpg" alt="Miloš Kotek ve svém ateliéru, od barvy po lokty" loading="lazy" decoding="async"></div>
+    <div class="uvod">jedno jméno — čtyři řemesla</div>
+    <div class="slova">
+      <div class="slovo" data-slovo="0"><span class="obrys">Malíř</span><span class="plny">Malíř</span></div>
+      <div class="slovo dlouhe" data-slovo="1"><span class="obrys">Písmomalíř</span><span class="plny">Písmomalíř</span></div>
+      <div class="slovo" data-slovo="2"><span class="obrys">Patinér</span><span class="plny">Patinér</span></div>
+      <div class="slovo" data-slovo="3"><span class="obrys">Mistr</span><span class="plny">Mistr</span></div>
+    </div>
+    <div class="veta" id="manifestVeta">Talent objevil jako kluk — <strong>a už ho nikdy nepustil.</strong></div>
+    <div class="pocitadlo">od logotypů přes světelnou reklamu po autorskou tvorbu</div>
+  </div>
+</section>
+
+<!-- MEZIHRA — stropní malby -->
+<section id="mezihra" data-theme="ink" data-stitek="stropy">
+  <div class="mez-bg"><img id="mezImg" src="assets/mural-strop.jpg" alt="Stropní malby Miloše Kotka mezi dřevěnými trámy" loading="lazy" decoding="async"></div>
+  <div class="mez-txt">
+    <div class="kicker">Z ateliéru</div>
+    <h2 class="reveal">Jeho kresby rostou<br><em>i po stropech</em></h2>
+  </div>
+</section>
+
+<!-- 03–05 DÍLNA — tři dějství -->
+<section id="dilna" data-stitek="řemesla">
+  <div class="ram" id="ram">
+
+    <article class="akt" id="akt-malba">
+      <div class="malba-scena">
+        <div>
+          <div class="kicker"><span class="num">I</span> Malba</div>
+          <h3>Kde končí zakázka<br><em>a začíná svoboda</em></h3>
+          <p class="text">Volná tvorba je protiváha řemesla. Plátna, na kterých se potkává <strong>zkušenost padesáti let s barvou</strong> — a chuť zkoušet dál. Olej, akryl, kombinované techniky.</p>
+          <div class="malba-pozn">výběr z ateliéru — olej, akryl, akvarel</div>
+        </div>
+        <div class="platna">
+          <div class="platno-k pk1"></div>
+          <div class="platno-k pk2"></div>
+          <div class="platno-k pk3"></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="akt" id="akt-pismo">
+      <div class="kicker" style="justify-content:center"><span class="num">II</span> Písmomalířství</div>
+      <h3>Písmo malované <em>rukou</em></h3>
+      <svg class="napis" viewBox="0 0 760 190" aria-label="písmomalíř">
+        <text id="napisText" x="380" y="130" text-anchor="middle">písmomalíř</text>
+      </svg>
+      <p class="text">Žádný plotr, žádná fólie — <strong>štětec, linka, jistá ruka.</strong> Vývěsní štíty, cedule, zlacení, obnova historických nápisů.</p>
+      <div class="pismo-radky">
+        <span>vývěsní štíty</span><span>nápisy &amp; cedule</span><span>zlacení &amp; linky</span>
+      </div>
+    </article>
+
+    <article class="akt" id="akt-patina">
+      <div class="kicker" style="justify-content:center"><span class="num">III</span> Patinérství u filmu</div>
+      <div class="patina-title">Patina<span class="vrstva-rez" id="rez" aria-hidden="true">Patina</span></div>
+      <p class="text">Ve filmu nesmí být nic nové. <strong>Patinér nechá zeď zestárnout o sto let za jediný den</strong> — rez, prach, oprýskaná barva, stopy života. Kulisy, kterým kamera uvěří.</p>
+    </article>
+
+  </div>
+</section>
+
+<!-- 06 PROJEKTY -->
+<section id="projekty" data-theme="ink" data-stitek="projekty">
+  <div class="wrap">
+    <div class="kicker"><span class="num">06</span> Projekty</div>
+    <h2 class="title reveal">Ruce, které znají<br><em>značky i filmová plátna</em></h2>
+    <p class="lead reveal">Výběr z prací, kterými prošel jeho štětec — od restaurací přes muzejní expozice po filmové kulisy.</p>
+    <div class="proj-list">
+      <div class="proj-radek reveal">
+        <span class="idx">01</span>
+        <span class="nazev"><span class="proj-logo" id="bbLogo"><img src="assets/bb-logo.svg" alt="Bageterie Boulevard" onerror="this.parentNode.remove()"></span>Bageterie Boulevard</span>
+        <span class="obor">písmomalířské práce</span>
+      </div>
+      <div class="proj-radek reveal">
+        <span class="idx">02</span>
+        <span class="nazev">Muzeum Harryho Pottera</span>
+        <span class="obor">kulisy &amp; patina</span>
+      </div>
+      <div class="proj-radek reveal">
+        <span class="idx">03</span>
+        <span class="nazev">Blade Runner</span>
+        <span class="obor">filmová patina</span>
+      </div>
+    </div>
+    <p class="proj-pozn reveal">…a desítky dalších štítů, interiérů a kulis po celé zemi.</p>
+  </div>
+</section>
+
+<!-- 07 ZAKÁZKA -->
+<section id="zakazka" data-theme="zlato" data-stitek="zakázka">
+  <div class="wrap">
+    <div class="kicker"><span class="num">07</span> Zakázková malba</div>
+    <h2 class="title reveal">Máte stěnu, štít<br>nebo <em>nápad?</em></h2>
+    <p class="lead reveal">Zakázková malba na míru — od obrazu do interiéru přes malovaný štít až po patinu na míru. Napište, co máte v hlavě, a domluvíme se na cestě k tomu.</p>
+    <div class="zak-ukazky">
+      <div class="zak-foto reveal"><img src="assets/malba-hlavy.jpg" alt="Obraz na zakázku — dvě hlavy, olej na plátně" loading="lazy" decoding="async"><div class="pop">olej na plátně</div></div>
+      <div class="zak-foto reveal"><img src="assets/grafika-ilustrace.jpg" alt="Zakázková ilustrace — barevná krajina" loading="lazy" decoding="async"><div class="pop">zakázková ilustrace</div></div>
+    </div>
+    <a class="cta" id="cta" href="mailto:milkot@atlas.cz">Napsat Milošovi
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- 07 CENÍK -->
+<section id="cenik" data-theme="ink" data-stitek="ceník">
+  <div class="wrap">
+    <div class="kicker"><span class="num">08</span> Ceník</div>
+    <h2 class="title reveal">Poctivá práce,<br><em>poctivá cena</em></h2>
+    <p class="lead reveal">Každá zakázka je jiná — proto je cena vždy dohodou po první nezávazné konzultaci. Orientačně:</p>
+    <div class="cenik-grid">
+      <div class="cena-karta reveal">
+        <div class="typ">Obrazy</div>
+        <h3>Autorská &amp; zakázková malba</h3>
+        <div class="cena">individuálně <small>dle formátu a techniky</small></div>
+        <ul><li>olej, akryl, kombinovaná technika</li><li>obraz na míru interiéru</li><li>konzultace zdarma</li></ul>
+      </div>
+      <div class="cena-karta zvyraznena reveal">
+        <div class="typ">Písmo</div>
+        <h3>Nápisy, štíty, logotypy</h3>
+        <div class="cena">dohodou <small>dle rozsahu a povrchu</small></div>
+        <ul><li>ručně malované nápisy a cedule</li><li>návrh logotypu od skici</li><li>obnova historických štítů</li></ul>
+      </div>
+      <div class="cena-karta reveal">
+        <div class="typ">Film &amp; interiér</div>
+        <h3>Patina &amp; dekorativní malba</h3>
+        <div class="cena">dle projektu <small>denní sazba / m²</small></div>
+        <ul><li>patinování kulis a rekvizit</li><li>stárnutí povrchů, imitace materiálů</li><li>spolupráce s filmovými štáby</li></ul>
+      </div>
+    </div>
+    <p class="cenik-pozn">Nezávazná poptávka nic nestojí — ozvěte se s představou a rozpočtem, zbytek doladíme spolu.</p>
+  </div>
+</section>
+
+<!-- 08 FAQ -->
+<section id="faq" data-theme="ink" data-stitek="otázky">
+  <div class="wrap">
+    <div class="kicker"><span class="num">09</span> Časté otázky</div>
+    <h2 class="title reveal">Na co se ptáte<br><em>nejčastěji</em></h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">Jak probíhá zakázka na míru?<span class="plus"></span></button>
+        <div class="faq-a"><p>Začínáme nezávaznou konzultací — po telefonu, e-mailem nebo osobně. Probereme představu, místo, rozměry a rozpočet. Následuje skica či návrh, po odsouhlasení samotná realizace. Průběžně posíláme fotky, ať víte, jak práce roste.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Jak dlouho trvá namalovat obraz nebo štít?<span class="plus"></span></button>
+        <div class="faq-a"><p>Menší obraz či nápis obvykle do dvou až tří týdnů, větší realizace (fasády, rozsáhlé patiny) podle rozsahu — vždy dostanete termín předem a ten platí.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Malujete i mimo Prahu / na místě u klienta?<span class="plus"></span></button>
+        <div class="faq-a"><p>Ano. Nápisy, štíty, dekorativní malby a patiny vznikají přímo na místě. Dopravu a případné lešení řešíme v rámci kalkulace.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Kolik stojí návrh logotypu?<span class="plus"></span></button>
+        <div class="faq-a"><p>Cena vychází z rozsahu — jestli jde o samotný znak, nebo kompletní vizuál. Po krátkém zadání pošleme konkrétní nabídku, první konzultace je vždy zdarma.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Co přesně dělá patinér u filmu?<span class="plus"></span></button>
+        <div class="faq-a"><p>Patinér „stárne" kulisy a rekvizity tak, aby na plátně působily věrohodně — nová zeď dostane desítky let života, čerstvý nátěr oprýská, kov zreziví. Je to malířské řemeslo ve službách kamery.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 KONTAKT -->
+<section id="kontakt" data-theme="ink" data-stitek="kontakt">
+  <div class="wrap">
+    <div class="kicker"><span class="num">10</span> Kontakt</div>
+    <h2 class="title reveal">Domluvme se<br><em>na první barvě</em></h2>
+    <div class="kontakt-hlavni">
+      <a class="kontakt-radek reveal" href="mailto:milkot@atlas.cz"><span class="lbl">e-mail</span><span class="val">milkot@atlas.cz</span></a>
+      <a class="kontakt-radek reveal" href="tel:+420721805808"><span class="lbl">telefon</span><span class="val">721 805 808</span></a>
+    </div>
+  </div>
+  <footer>
+    <span>© 2026 Miloš Kotek — malíř &amp; písmomalíř</span>
+    <span class="sig">M. Kotek</span>
+    <span>web s láskou postavil syn</span>
+  </footer>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+'use strict';
+var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+var hasThree = typeof THREE !== 'undefined';
+if (hasGsap) gsap.registerPlugin(ScrollTrigger);
+
+/* ============ PALETY DĚJSTVÍ — celá stránka mění kůži ============ */
+var PALETY = {
+  ink:    {'--bg':'#0e0d0b', '--fg':'#efe9df', '--dim':'#b0a695', '--akcent':'#d4a24c'},
+  malba:  {'--bg':'#140e0c', '--fg':'#f2e9e2', '--dim':'#bfa79b', '--akcent':'#c8622f'},
+  pismo:  {'--bg':'#0f1d16', '--fg':'#eef2e9', '--dim':'#a8b2a4', '--akcent':'#e8c987'},
+  patina: {'--bg':'#17100a', '--fg':'#e8dcc8', '--dim':'#a08d72', '--akcent':'#a0522d'},
+  zlato:  {'--bg':'#191307', '--fg':'#f4ecdc', '--dim':'#c0b190', '--akcent':'#e8c987'}
+};
+function tema(nazev, dur){
+  if (!hasGsap) return;
+  var p = PALETY[nazev] || PALETY.ink;
+  gsap.to('html', Object.assign({duration:dur||1.1, ease:'power2.inOut', overwrite:'auto'}, p));
+}
+
+/* ============ THREE.JS — pigment v ateliéru ============ */
+var pigment = null;
+function initPigment(){
+  if (!hasThree || reduced) return;
+  var canvas = document.getElementById('platno');
+  var renderer = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:false});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
+  camera.position.z = 8;
+
+  /* hranice obrazu — spočítané z kamery, ať nic neuteče ven */
+  var hranY = Math.tan(Math.PI/6)*8;   /* fov 60 → tan(30°)·vzdálenost */
+  var hranX = hranY*1.7;
+
+  var COUNT = window.innerWidth < 760 ? 1100 : 2600;
+  var positions = new Float32Array(COUNT*3);
+  var colors = new Float32Array(COUNT*3);
+  var vel = new Float32Array(COUNT*2);
+  var seeds = new Float32Array(COUNT*2);
+  /* olejová paleta — zlato, rumělka, kobalt, zeleň, krémová, fialka, oranž */
+  var palette = [
+    [0.83,0.64,0.30],[0.91,0.79,0.53],[0.69,0.23,0.18],[0.18,0.29,0.41],
+    [0.22,0.38,0.28],[0.94,0.91,0.87],[0.78,0.38,0.18],[0.42,0.28,0.52]
+  ];
+  var weights  = [0.26,0.16,0.14,0.12,0.10,0.08,0.08,0.06];
+  function pickColor(){
+    var r = Math.random(), acc = 0;
+    for (var k=0;k<weights.length;k++){ acc += weights[k]; if (r <= acc) return palette[k]; }
+    return palette[0];
+  }
+  for (var i=0;i<COUNT;i++){
+    positions[i*3]   = (Math.random()-0.5)*15;
+    positions[i*3+1] = (Math.random()-0.5)*8.5;
+    positions[i*3+2] = 0;
+    var c = pickColor();
+    colors[i*3]=c[0]; colors[i*3+1]=c[1]; colors[i*3+2]=c[2];
+    vel[i*2] = (Math.random()-0.5)*0.3;
+    vel[i*2+1] = (Math.random()-0.5)*0.3;
+    seeds[i*2]=Math.random()*100;
+    seeds[i*2+1]=Math.random()*Math.PI*2;
+  }
+  var geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+  geo.setAttribute('color', new THREE.BufferAttribute(colors,3));
+
+  var cv = document.createElement('canvas'); cv.width=cv.height=64;
+  var cx = cv.getContext('2d');
+  var grad = cx.createRadialGradient(32,32,0,32,32,32);
+  grad.addColorStop(0,'rgba(255,255,255,1)');
+  grad.addColorStop(0.4,'rgba(255,255,255,0.5)');
+  grad.addColorStop(1,'rgba(255,255,255,0)');
+  cx.fillStyle=grad; cx.fillRect(0,0,64,64);
+
+  var mat = new THREE.PointsMaterial({
+    size:0.11, map:new THREE.CanvasTexture(cv), vertexColors:true, transparent:true,
+    opacity:0.9, depthWrite:false, blending:THREE.AdditiveBlending
+  });
+  var points = new THREE.Points(geo, mat);
+  scene.add(points);
+
+  /* ========= STOPA ZA MYŠÍ — čerstvé kapky barvy, které zasychají ========= */
+  var TN = 520, tIdx = 0;
+  var tpos = new Float32Array(TN*3);
+  var tcol = new Float32Array(TN*3);      /* aktuální (pohasínající) barva */
+  var tbase = new Float32Array(TN*3);     /* výchozí barva kapky */
+  var tlife = new Float32Array(TN);
+  for (var q=0;q<TN;q++){ tpos[q*3+1] = -999; }
+  var tgeo = new THREE.BufferGeometry();
+  tgeo.setAttribute('position', new THREE.BufferAttribute(tpos,3));
+  tgeo.setAttribute('color', new THREE.BufferAttribute(tcol,3));
+  var tmat = new THREE.PointsMaterial({
+    size:0.17, map:mat.map, vertexColors:true, transparent:true,
+    opacity:0.9, depthWrite:false, blending:THREE.AdditiveBlending
+  });
+  scene.add(new THREE.Points(tgeo, tmat));
+  function kapka(x, y, sila){
+    var c = pickColor();
+    var j = tIdx = (tIdx+1)%TN;
+    tpos[j*3]   = x + (Math.random()-0.5)*0.22;
+    tpos[j*3+1] = y + (Math.random()-0.5)*0.22;
+    tpos[j*3+2] = 0;
+    tbase[j*3]=c[0]*sila; tbase[j*3+1]=c[1]*sila; tbase[j*3+2]=c[2]*sila;
+    tlife[j] = 1;
+  }
+
+  /* víry — neviditelná centra, která pigment shlukují a zase rozhánějí */
+  var VIRY = [];
+  for (var a=0;a<4;a++){
+    VIRY.push({
+      ox:(Math.random()-0.5)*7, oy:(Math.random()-0.5)*3.5,
+      sp:0.10+Math.random()*0.14, ph:Math.random()*6.28,
+      puls:0.22+Math.random()*0.3, sila:1.6+Math.random()*1.4
+    });
+  }
+
+  /* myš ve světových souřadnicích + její rychlost = rozmazávání */
+  var ms = {x:999, y:999, vx:0, vy:0, lx:999, ly:999};
+  function naSvet(e){
+    var nx = (e.clientX/window.innerWidth)*2-1;
+    var ny = -(e.clientY/window.innerHeight)*2+1;
+    var v = new THREE.Vector3(nx, ny, 0.5).unproject(camera);
+    var dir = v.sub(camera.position).normalize();
+    var t = -camera.position.z/dir.z;
+    return {x:camera.position.x+dir.x*t, y:camera.position.y+dir.y*t};
+  }
+  window.addEventListener('pointermove', function(e){
+    var w = naSvet(e);
+    if (ms.lx > 900){ ms.lx = w.x; ms.ly = w.y; }
+    ms.x = w.x; ms.y = w.y;
+  });
+
+  function resize(){
+    var w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w,h,false);
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+    hranX = hranY*camera.aspect;   /* mantinely kopírují šířku obrazu */
+  }
+  window.addEventListener('resize', resize); resize();
+
+  var clock = new THREE.Clock();
+  var visible = true;
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(en){visible = en[0].isIntersecting;},{threshold:0})
+      .observe(document.getElementById('hero'));
+  }
+
+  function tick(){
+    requestAnimationFrame(tick);
+    if (!visible) return;
+    var dt = Math.min(clock.getDelta(), 0.05);
+    var t = clock.getElapsedTime();
+
+    /* rychlost myši (omezená, ať švih neutrhne částice) */
+    ms.vx = ms.x - ms.lx; ms.vy = ms.y - ms.ly;
+    var mv = Math.sqrt(ms.vx*ms.vx + ms.vy*ms.vy);
+    if (mv > 1.2){ ms.vx = ms.vx/mv*1.2; ms.vy = ms.vy/mv*1.2; }
+    ms.lx += (ms.x-ms.lx)*0.5; ms.ly += (ms.y-ms.ly)*0.5;
+
+    /* pozice vírů + pulz (kladný = shluk, záporný = rozestup) */
+    var va = [];
+    for (var k=0;k<VIRY.length;k++){
+      var V = VIRY[k];
+      va.push({
+        x: V.ox + Math.cos(t*V.sp + V.ph)*2.2,
+        y: V.oy + Math.sin(t*V.sp*0.8 + V.ph)*1.5,
+        p: Math.sin(t*V.puls + V.ph) * V.sila
+      });
+    }
+
+    var pos = geo.attributes.position.array;
+    var damp = Math.max(0, 1 - 2.0*dt);
+    for (var i=0;i<COUNT;i++){
+      var x = pos[i*3], y = pos[i*3+1];
+      var vx = vel[i*2], vy = vel[i*2+1];
+      var s0 = seeds[i*2], ph = seeds[i*2+1];
+
+      /* pomalé mramorování */
+      vx += Math.sin(y*0.42 + t*0.35 + s0)*0.22*dt;
+      vy += Math.cos(x*0.36 - t*0.3 + ph)*0.2*dt;
+
+      /* víry — barvy na oleji se slévají a rozpadají */
+      for (var k2=0;k2<va.length;k2++){
+        var A = va[k2];
+        var dx = A.x-x, dy = A.y-y;
+        var d2 = dx*dx + dy*dy + 0.6;
+        var f = (A.p/d2)*dt;
+        vx += dx*f; vy += dy*f;
+        /* lehké zavíření kolem centra */
+        vx += -dy/d2*0.35*dt; vy += dx/d2*0.35*dt;
+      }
+
+      /* pigment následuje kurzor a táhne se za ním jako vlečka */
+      if (ms.x < 900){
+        var mdx = ms.x-x, mdy = ms.y-y;
+        var md2 = mdx*mdx + mdy*mdy;
+        if (md2 < 34){
+          var vliv = Math.exp(-md2/7);
+          vx += mdx*vliv*8.5*dt + ms.vx*vliv*11*dt;
+          vy += mdy*vliv*8.5*dt + ms.vy*vliv*11*dt;
+          /* jemné kroužení kolem kurzoru, ať vlečka žije */
+          vx += -mdy*vliv*1.3*dt;
+          vy +=  mdx*vliv*1.3*dt;
+        }
+      }
+
+      /* měkké držení u středu */
+      vx -= x*0.05*dt; vy -= y*0.08*dt;
+
+      vx *= damp; vy *= damp;
+      x += vx*dt*3; y += vy*dt*3;
+
+      /* mantinely — odraz od okraje obrazu */
+      if (x >  hranX){ x =  hranX; vx = -Math.abs(vx)*0.6; }
+      if (x < -hranX){ x = -hranX; vx =  Math.abs(vx)*0.6; }
+      if (y >  hranY){ y =  hranY; vy = -Math.abs(vy)*0.6; }
+      if (y < -hranY){ y = -hranY; vy =  Math.abs(vy)*0.6; }
+
+      pos[i*3] = x; pos[i*3+1] = y;
+      vel[i*2] = vx; vel[i*2+1] = vy;
+    }
+    geo.attributes.position.needsUpdate = true;
+
+    /* stopa za myší — kapky podle rychlosti pohybu */
+    if (mv > 0.015 && ms.x < 900){
+      var pocet = Math.min(10, Math.max(2, Math.round(mv*22)));
+      for (var s=1; s<=pocet; s++){
+        var u = s/pocet;
+        kapka(ms.x - ms.vx*u*2.2, ms.y - ms.vy*u*2.2, 0.55 + Math.min(0.45, mv*0.6));
+      }
+    }
+    /* kapky zasychají — pohasínají do ztracena */
+    var ub = Math.min(1, 1.15*dt);
+    for (var q2=0;q2<TN;q2++){
+      if (tlife[q2] > 0){
+        tlife[q2] = Math.max(0, tlife[q2]-ub);
+        var L = tlife[q2]*tlife[q2];
+        tcol[q2*3]   = tbase[q2*3]*L;
+        tcol[q2*3+1] = tbase[q2*3+1]*L;
+        tcol[q2*3+2] = tbase[q2*3+2]*L;
+      }
+    }
+    tgeo.attributes.color.needsUpdate = true;
+    tgeo.attributes.position.needsUpdate = true;
+
+    renderer.render(scene, camera);
+  }
+  tick();
+  pigment = {points:points, mat:mat, trail:tmat};
+}
+
+/* ============ JMÉNO — písmena mezi žlutou a černou ============ */
+function jmeno(){
+  var pismena = [];
+  document.querySelectorAll('h1.hero-name .line span').forEach(function(w){
+    var text = w.textContent;
+    w.textContent = '';
+    text.split('').forEach(function(ch){
+      var i = document.createElement('i');
+      i.className = 'pis';
+      i.textContent = ch;
+      w.appendChild(i);
+      pismena.push(i);
+    });
+  });
+  /* úvodní rozložení — pár písmen černých hned */
+  pismena.forEach(function(p){ if (Math.random() < 0.3) p.classList.add('cerna'); });
+  if (reduced) return;
+  /* náhodné přelévání */
+  setInterval(function(){
+    var kolik = 1 + Math.floor(Math.random()*3);
+    for (var k=0;k<kolik;k++){
+      var p = pismena[Math.floor(Math.random()*pismena.length)];
+      p.classList.toggle('cerna');
+    }
+  }, 460);
+}
+
+/* ============ LOADER + INTRO ============ */
+function intro(){
+  var loader = document.getElementById('loader');
+  if (!hasGsap){
+    loader.classList.add('done');
+    return;
+  }
+  var tl = gsap.timeline();
+  tl.to(loader.querySelector('.stroke i'), {width:'100%', duration:1.1, ease:'power2.inOut'})
+    .add(function(){ loader.classList.add('done'); })
+    .to('h1.hero-name .line span', {y:0, duration:1.2, ease:'power4.out', stagger:0.12}, '+=0.15')
+    .from('.hero-kicker', {opacity:0, y:16, duration:0.8}, '-=0.8')
+    .from('.hero-sub', {opacity:0, y:14, duration:0.8}, '-=0.6')
+    .from('.hero-scroll', {opacity:0, duration:0.9}, '-=0.4');
+}
+
+/* ============ HERO — pigment se rozptýlí, jméno odpluje ============ */
+function heroScroll(){
+  if (!hasGsap) return;
+  var tl = gsap.timeline({
+    scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:true}
+  });
+  tl.to('#hero .inner', {opacity:0, y:-90, ease:'none'}, 0);
+  if (pigment){
+    tl.to(pigment.points.scale, {x:2.4, y:2.4, z:2.4, ease:'none'}, 0)
+      .to(pigment.mat, {opacity:0, ease:'none'}, 0)
+      .to(pigment.trail, {opacity:0, ease:'none'}, 0);
+  }
+}
+
+/* ============ MANIFEST — slova mistra ============ */
+function manifest(){
+  if (!hasGsap || reduced){ document.getElementById('manifest').classList.add('staticky'); return; }
+  var slova = gsap.utils.toArray('#manifest .slovo');
+  var veta = document.getElementById('manifestVeta');
+  gsap.set(veta, {opacity:0, y:20});
+  var tl = gsap.timeline({
+    scrollTrigger:{trigger:'#manifest', start:'top top', end:'bottom bottom', scrub:0.5}
+  });
+  slova.forEach(function(s, i){
+    var plny = s.querySelector('.plny');
+    var t = i*3;
+    tl.fromTo(s, {opacity:0, scale:0.94}, {opacity:1, scale:1, duration:0.7, ease:'none'}, t)
+      .fromTo(plny, {clipPath:'inset(100% 0 0 0)'}, {clipPath:'inset(0% 0 0 0)', duration:1.6, ease:'none'}, t+0.5);
+    if (i < slova.length-1){
+      tl.to(s, {opacity:0, y:-40, duration:0.7, ease:'none'}, t+2.4);
+    }
+  });
+  // poslední slovo (Mistr) zůstává — a za ním se vynoří on sám
+  tl.fromTo('#portret', {opacity:0, scale:1.07},
+      {opacity:1, scale:1, duration:1.6, ease:'none'}, slova.length*3 - 2.2)
+    .to('#manifest .uvod', {opacity:0, duration:0.8, ease:'none'}, slova.length*3 - 2.2)
+    .to(veta, {opacity:1, y:0, duration:1, ease:'none'}, slova.length*3 - 1);
+}
+
+/* ============ DÍLNA — tři dějství, celá stránka mění kůži ============ */
+function dilna(){
+  var sekce = document.getElementById('dilna');
+  if (!hasGsap || reduced){ sekce.classList.add('staticky'); return; }
+
+  var napis = document.getElementById('napisText');
+  var delka = 0;
+  try{
+    delka = Math.ceil(napis.getComputedTextLength());
+    napis.style.strokeDasharray = delka;
+    napis.style.strokeDashoffset = delka;
+    napis.setAttribute('fill', '#e8c987');
+    napis.style.fillOpacity = 0;
+  }catch(e){ napis = null; }
+
+  var displace = document.getElementById('rezDisplace');
+  var dScale = {v:0};
+
+  var tl = gsap.timeline({
+    scrollTrigger:{
+      trigger:'#dilna', start:'top top', end:'+=340%', scrub:0.6, pin:true,
+      onEnter:function(){ tema('malba', 0.8); },
+      onLeaveBack:function(){ tema('ink', 0.8); }
+    }
+  });
+
+  /* — dějství I: plátna připlouvají — */
+  tl.from('.pk1', {y:120, opacity:0, rotation:-4, duration:1.2, ease:'none'}, 0)
+    .from('.pk2', {y:160, opacity:0, rotation:3, duration:1.2, ease:'none'}, 0.25)
+    .from('.pk3', {y:200, opacity:0, rotation:-2, duration:1.2, ease:'none'}, 0.5)
+    .to('.pk1', {y:-25, duration:1.4, ease:'none'}, 1.6)
+    .to('.pk2', {y:-45, duration:1.4, ease:'none'}, 1.6)
+    .to('.pk3', {y:-12, duration:1.4, ease:'none'}, 1.6);
+
+  /* — dějství I odchází dřív, než se rozlije další — */
+  tl.to('.malba-scena', {opacity:0, y:-70, duration:0.9, ease:'power1.in'}, 2.7);
+
+  /* — přechod na dějství II: zlatý kruh se rozlije — */
+  tl.add(function(){ tema('pismo', 1); }, 3.3)
+    .to('#akt-pismo', {clipPath:'circle(150% at 78% 40%)', duration:1.3, ease:'power2.in'}, 3.3);
+
+  /* — dějství II: písmo se kreslí a prolije zlatem — */
+  if (napis){
+    tl.to(napis, {strokeDashoffset:0, duration:3, ease:'none'}, 4.6)
+      .to(napis, {fillOpacity:0.95, duration:1, ease:'none'}, 7.2);
+  }
+
+  /* — dějství II odchází — */
+  tl.to('#akt-pismo > *', {opacity:0, y:-50, duration:0.9, ease:'power1.in', stagger:0.05}, 8.0);
+
+  /* — přechod na dějství III: rez prožírá stránku — */
+  tl.add(function(){ tema('patina', 1); }, 8.6)
+    .to('#akt-patina', {clipPath:'circle(150% at 22% 65%)', duration:1.3, ease:'power2.in'}, 8.6);
+
+  /* — dějství III: VŠECHNO rezaví — titulek, zrno, celá stránka — */
+  tl.to('#rez', {opacity:1, duration:3, ease:'none'}, 10)
+    .to(dScale, {v:34, duration:3, ease:'none',
+        onUpdate:function(){ if(displace) displace.setAttribute('scale', dScale.v.toFixed(1)); }}, 10.5)
+    .to('#koroze', {opacity:0.55, duration:3, ease:'none'}, 10)
+    .to('html', {'--zrno':0.85, duration:3, ease:'none'}, 10)
+    .to('.patina-title', {letterSpacing:'0.05em', duration:3, ease:'none'}, 10);
+}
+
+/* ============ MEZIHRA — parallax stropních maleb ============ */
+function mezihra(){
+  if (!hasGsap || reduced) return;
+  gsap.fromTo('#mezImg', {yPercent:-16}, {
+    yPercent:0, ease:'none',
+    scrollTrigger:{trigger:'#mezihra', start:'top bottom', end:'bottom top', scrub:true}
+  });
+}
+
+/* ============ RESTAUROVÁNÍ — po patině se stránka očistí ============ */
+function restaurovani(){
+  if (!hasGsap) return;
+  ScrollTrigger.create({
+    trigger:'#projekty', start:'top 75%',
+    onEnter:function(){
+      tema('ink', 1.4);
+      gsap.to('#koroze', {opacity:0, duration:1.6, ease:'power2.out'});
+      gsap.to('html', {'--zrno':0.4, duration:1.6});
+    },
+    onLeaveBack:function(){ tema('patina', 1); }
+  });
+  ScrollTrigger.create({
+    trigger:'#zakazka', start:'top 60%',
+    onEnter:function(){ tema('zlato', 1.2); },
+    onLeaveBack:function(){ tema('ink', 1.2); }
+  });
+  ['cenik','faq','kontakt'].forEach(function(id){
+    ScrollTrigger.create({
+      trigger:'#'+id, start:'top 60%',
+      onEnter:function(){ tema(id==='kontakt'?'zlato':'ink', 1.2); },
+      onEnterBack:function(){ tema(id==='kontakt'?'zlato':'ink', 1.2); }
+    });
+  });
+}
+
+/* ============ NIT — roste se scrollem, mění štítek ============ */
+function nit(){
+  if (!hasGsap) return;
+  var cara = document.getElementById('nitCara');
+  var stitek = document.getElementById('nitStitek');
+  ScrollTrigger.create({
+    onUpdate:function(){
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? (window.scrollY || document.documentElement.scrollTop)/max : 0;
+      cara.style.transform = 'scaleY('+p+')';
+    }
+  });
+  document.querySelectorAll('[data-stitek]').forEach(function(sec){
+    ScrollTrigger.create({
+      trigger:sec, start:'top 50%', end:'bottom 50%',
+      onToggle:function(self){
+        if (self.isActive){
+          gsap.fromTo(stitek, {opacity:0}, {opacity:1, duration:0.5});
+          stitek.textContent = sec.getAttribute('data-stitek');
+        }
+      }
+    });
+  });
+}
+
+/* ============ OBECNÉ ODHALENÍ + NAV ============ */
+function scrollFx(){
+  if (!hasGsap){
+    document.querySelectorAll('.reveal').forEach(function(el){el.style.opacity=1;el.style.transform='none';});
+    document.querySelectorAll('h1.hero-name .line span').forEach(function(el){el.style.transform='none';});
+    return;
+  }
+  gsap.utils.toArray('.reveal').forEach(function(el){
+    gsap.to(el, {opacity:1, y:0, duration:1, ease:'power3.out',
+      scrollTrigger:{trigger:el, start:'top 88%'}});
+  });
+  var lastY = 0, nav = document.getElementById('nav');
+  ScrollTrigger.create({
+    onUpdate:function(self){
+      var y = self.scroll();
+      nav.classList.toggle('hidden', y > 120 && y > lastY);
+      lastY = y;
+    }
+  });
+}
+
+/* ============ MAGNETICKÉ CTA ============ */
+function magnet(){
+  if (!hasGsap || reduced) return;
+  var btn = document.getElementById('cta');
+  if (!btn) return;
+  var xTo = gsap.quickTo(btn, 'x', {duration:0.4, ease:'power3'});
+  var yTo = gsap.quickTo(btn, 'y', {duration:0.4, ease:'power3'});
+  btn.addEventListener('pointermove', function(e){
+    var r = btn.getBoundingClientRect();
+    xTo((e.clientX - r.left - r.width/2)*0.35);
+    yTo((e.clientY - r.top - r.height/2)*0.45);
+  });
+  btn.addEventListener('pointerleave', function(){ xTo(0); yTo(0); });
+}
+
+/* ============ FAQ ============ */
+function faq(){
+  document.querySelectorAll('.faq-item').forEach(function(item){
+    var btn = item.querySelector('.faq-q');
+    var ans = item.querySelector('.faq-a');
+    btn.addEventListener('click', function(){
+      var open = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(function(o){
+        o.classList.remove('open');
+        if (hasGsap) gsap.to(o.querySelector('.faq-a'), {maxHeight:0, duration:0.45, ease:'power2.inOut'});
+        else o.querySelector('.faq-a').style.maxHeight = 0;
+      });
+      if (!open){
+        item.classList.add('open');
+        if (hasGsap) gsap.to(ans, {maxHeight:ans.scrollHeight+20, duration:0.55, ease:'power2.out'});
+        else ans.style.maxHeight = ans.scrollHeight+20+'px';
+      }
+    });
+  });
+}
+
+/* ============ MOBILNÍ MENU ============ */
+function menu(){
+  var b = document.getElementById('burger');
+  var m = document.getElementById('mobmenu');
+  if (!b || !m) return;
+  b.addEventListener('click', function(){
+    document.body.classList.toggle('menu-open');
+    b.setAttribute('aria-label', document.body.classList.contains('menu-open') ? 'Zavřít menu' : 'Otevřít menu');
+  });
+  m.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ document.body.classList.remove('menu-open'); });
+  });
+}
+
+/* ============ KOTVY ============ */
+function anchors(){
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var target = document.querySelector(a.getAttribute('href'));
+      if (target){ e.preventDefault(); target.scrollIntoView({behavior: reduced?'auto':'smooth'}); }
+    });
+  });
+}
+
+/* start */
+window.addEventListener('load', function(){
+  jmeno();
+  initPigment();
+  intro();
+  heroScroll();
+  manifest();
+  mezihra();
+  dilna();
+  restaurovani();
+  nit();
+  scrollFx();
+  magnet();
+  faq();
+  menu();
+  anchors();
+  if (reduced){
+    document.querySelectorAll('.reveal').forEach(function(el){el.style.opacity=1;el.style.transform='none';});
+    document.querySelectorAll('h1.hero-name .line span').forEach(function(el){el.style.transform='none';});
+  }
+  if (hasGsap) ScrollTrigger.refresh();
+});
+setTimeout(function(){
+  var l = document.getElementById('loader');
+  if (l && !l.classList.contains('done')) l.classList.add('done');
+}, 3500);
+})();
+</script>
+</body>
+</html>
