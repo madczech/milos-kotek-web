@@ -1584,14 +1584,23 @@ function galerie(){
     if (e.target === lb || e.target.classList.contains('lb-zavrit')) zavriLb();
   });
 
-  /* klik: aktivní karta se zvětší, ostatní se vycentrují */
+  /* klik na dílo: dojede do středu a samo se zvětší */
+  var cekejAOtevri = null;
   karty.forEach(function(k){
     k.addEventListener('click', function(){
       if (pohnul) return;
       var i = seznam.indexOf(k);
       if (i === -1) return;
-      if (i === Math.round(cil)) otevriLb(k);
-      else cil = i;
+      if (i === Math.round(cil)){ otevriLb(k); return; }
+      cil = i;
+      if (cekejAOtevri) clearInterval(cekejAOtevri);
+      cekejAOtevri = setInterval(function(){
+        if (Math.round(cil) !== i){ clearInterval(cekejAOtevri); cekejAOtevri = null; return; }
+        if (Math.abs(cur - i) < 0.06){
+          clearInterval(cekejAOtevri); cekejAOtevri = null;
+          otevriLb(k);
+        }
+      }, 80);
     });
   });
 
