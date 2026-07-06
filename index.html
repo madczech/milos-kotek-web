@@ -275,25 +275,6 @@ h2.title em{font-style:italic;color:var(--akcent);font-weight:300}
 .pk5{width:22%;aspect-ratio:3/4.5;right:36%;top:34%;background-image:url('assets/g-upir.jpg');z-index:5;box-shadow:0 24px 55px -14px rgba(0,0,0,.9)}
 .malba-pozn{font-family:var(--hand);font-size:1.25rem;color:var(--akcent);margin-top:1.4rem;opacity:.85}
 
-/* ============ MEZIHRA — stropní malby ============ */
-#mezihra{height:72vh;position:relative;overflow:hidden}
-#mezihra .mez-bg{position:absolute;inset:0}
-#mezihra .mez-bg img{width:100%;height:130%;object-fit:cover;object-position:center 30%}
-#mezihra::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(rgba(14,13,11,.86),rgba(14,13,11,.25) 45%,rgba(14,13,11,.9));
-}
-#mezihra .mez-txt{
-  position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;
-  padding:0 clamp(1.2rem,6vw,4rem) clamp(2.5rem,7vh,4.5rem);
-}
-#mezihra .mez-txt .kicker{margin-bottom:.8rem}
-#mezihra h2{
-  font-family:var(--serif);font-weight:600;
-  font-size:clamp(1.8rem,4.6vw,3.6rem);line-height:1.08;max-width:20ch;
-}
-#mezihra h2 em{font-style:italic;color:var(--akcent);font-weight:300}
-
 /* dějství II — PÍSMO */
 #akt-pismo{background:radial-gradient(ellipse 100% 80% at 50% 0%,#18271f,#0f1d16 70%);align-items:center;text-align:center;clip-path:circle(0% at 78% 40%)}
 #akt-pismo svg.napis{width:min(720px,90vw);height:auto;margin:2.2rem 0 1.4rem;overflow:visible}
@@ -323,6 +304,25 @@ h2.title em{font-style:italic;color:var(--akcent);font-weight:300}
 /* ============ GALERIE — zakřivený pás děl ============ */
 #galerie{overflow:hidden}
 #galerie .wrap{padding-bottom:clamp(3rem,7vh,5rem)}
+.gal-filtry{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:2.2rem}
+.gal-filtry button{
+  font-family:var(--sans);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);background:none;border:1px solid rgba(239,233,223,.2);
+  border-radius:60px;padding:.6rem 1.3rem;cursor:pointer;
+  transition:color .3s,border-color .3s,background .3s;
+}
+.gal-filtry button:hover{color:var(--fg);border-color:rgba(239,233,223,.45)}
+.gal-filtry button.aktivni{
+  color:#0e0d0b;background:var(--akcent);border-color:var(--akcent);font-weight:600;
+}
+.gal-lupa{
+  position:absolute;right:.9rem;bottom:.9rem;width:40px;height:40px;border-radius:50%;
+  background:rgba(212,162,76,.92);color:#0e0d0b;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;font-weight:600;line-height:1;
+  pointer-events:none;box-shadow:0 8px 20px -6px rgba(0,0,0,.6);
+}
+.gal-karta{transition:opacity .45s ease}
 .gal-scena{
   position:relative;height:clamp(340px,52vh,520px);margin-top:2.5rem;
   perspective:1400px;perspective-origin:50% 45%;
@@ -528,7 +528,6 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 @media(max-width:760px){
   #manifest .portret{height:auto;width:min(80vw,58vh)}
   #manifest .veta{padding:0 1.2rem}
-  #mezihra{height:52vh}
   .kontakt-radek{gap:.6rem}
 }
 @media(max-width:560px){
@@ -658,15 +657,6 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
   </div>
 </section>
 
-<!-- MEZIHRA — stropní malby -->
-<section id="mezihra" data-theme="ink" data-stitek="stropy">
-  <div class="mez-bg"><img id="mezImg" src="assets/mural-strop.jpg" alt="Stropní malby Miloše Kotka mezi dřevěnými trámy" loading="lazy" decoding="async"></div>
-  <div class="mez-txt">
-    <div class="kicker">Z ateliéru</div>
-    <h2 class="reveal">Jeho kresby rostou<br><em>i po stropech</em></h2>
-  </div>
-</section>
-
 <!-- 03–05 DÍLNA — tři dějství -->
 <section id="dilna" data-stitek="řemesla">
   <div class="ram" id="ram">
@@ -713,26 +703,33 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
   <div class="wrap">
     <div class="kicker"><span class="num">06</span> Galerie</div>
     <h2 class="title reveal">Projděte si<br><em>dílnu zblízka</em></h2>
+    <div class="gal-filtry reveal">
+      <button data-f="vse" class="aktivni">Vše</button>
+      <button data-f="olej">Olejomalby</button>
+      <button data-f="grafika">Grafika &amp; kresba</button>
+      <button data-f="reklama">Reklama &amp; písmo</button>
+      <button data-f="patina">Patinérské práce</button>
+    </div>
     <div class="gal-scena" id="galScena">
-      <div class="gal-karta" data-popis="Zlatá tvář s věží — signovaný olej, jeden z vrcholů autorské tvorby."><img src="assets/malba-strazce.jpg" alt="Olejomalba — zlatá tvář s věží" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Tvář obtočená spirálami drobných postav — akryl na černém plátně."><img src="assets/malba-spirala.jpg" alt="Malba — tvář se spirálami postav" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Akvarelová ilustrace — souboj člověka s hmyzím obrem v pusté krajině."><img src="assets/malba-akvarel.jpg" alt="Akvarel — souboj s hmyzím monstrem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Dvě protáhlé hlavy ve výkřiku — olej na zeleném plátně."><img src="assets/malba-hlavy.jpg" alt="Olej — dvě hlavy ve výkřiku" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Ručně malovaný nápis Na Podskále přímo na štítu penzionu."><img src="assets/g-podskale.jpg" alt="Malovaný štít Na Podskále" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Heraldická orlice s monogramem — malba provedená přímo na stěnu."><img src="assets/g-orlice.jpg" alt="Nástěnná malba orlice s monogramem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Miloš na lešení při práci na velkoformátové nástěnné malbě."><img src="assets/g-leseni.jpg" alt="Miloš Kotek na lešení při malbě" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Portrét s dobovou typografií rostoucí podél schodiště."><img src="assets/g-schodiste.jpg" alt="Nástěnná malba portrétu na schodišti" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Filmová budka zestárlá patinou tak, aby jí kamera uvěřila."><img src="assets/g-budka.jpg" alt="Filmová rekvizita — patinovaná budka" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Zelená stříška se zlacenými ornamenty — zakázková práce z dílny."><img src="assets/g-striska.jpg" alt="Stříška se zlacenými ornamenty" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Perokresba ze skicáře — surreální tváře propletené jedním tahem."><img src="assets/g-kresba.jpg" alt="Perokresba surreálních tváří" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Dvě tváře a dětský portrét — kresba propletená jedním gestem."><img src="assets/g-tvare.jpg" alt="Kresba dvou tváří s dětským portrétem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Temná hlava vystupující ze tmy — tuš ve stylu starého hororu."><img src="assets/g-upir.jpg" alt="Tušová kresba temné hlavy" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Lučištnice v pustině — dynamická kresba tuší."><img src="assets/g-lucistnice.jpg" alt="Tušová kresba lučištnice" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Siluety strážců na věžích — ilustrace tuší plná napětí."><img src="assets/g-siluety.jpg" alt="Ilustrace siluet na věžích" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Setkání s rohatým stvořením — fantaskní kresba tužkou."><img src="assets/g-stvoreni.jpg" alt="Kresba fantaskního stvoření" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Akt u krbu — jemná kresba tužkou."><img src="assets/g-akt.jpg" alt="Kresba aktu u krbu" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Pohled do jubilejní výstavy — desítky kreseb na jednom místě."><img src="assets/g-vystava.jpg" alt="Sál jubilejní výstavy plný kreseb" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Miloš mezi návštěvníky své výstavy."><img src="assets/g-milos-vystava.jpg" alt="Miloš Kotek na své výstavě" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="olej" data-popis="Zlatá tvář s věží — signovaný olej, jeden z vrcholů autorské tvorby."><img src="assets/malba-strazce.jpg" alt="Olejomalba — zlatá tvář s věží" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="olej" data-popis="Tvář obtočená spirálami drobných postav — akryl na černém plátně."><img src="assets/malba-spirala.jpg" alt="Malba — tvář se spirálami postav" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Akvarelová ilustrace — souboj člověka s hmyzím obrem v pusté krajině."><img src="assets/malba-akvarel.jpg" alt="Akvarel — souboj s hmyzím monstrem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="olej" data-popis="Dvě protáhlé hlavy ve výkřiku — olej na zeleném plátně."><img src="assets/malba-hlavy.jpg" alt="Olej — dvě hlavy ve výkřiku" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="reklama" data-popis="Ručně malovaný nápis Na Podskále přímo na štítu penzionu."><img src="assets/g-podskale.jpg" alt="Malovaný štít Na Podskále" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="reklama" data-popis="Heraldická orlice s monogramem — malba provedená přímo na stěnu."><img src="assets/g-orlice.jpg" alt="Nástěnná malba orlice s monogramem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="reklama" data-popis="Miloš na lešení při práci na velkoformátové nástěnné malbě."><img src="assets/g-leseni.jpg" alt="Miloš Kotek na lešení při malbě" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="reklama" data-popis="Portrét s dobovou typografií rostoucí podél schodiště."><img src="assets/g-schodiste.jpg" alt="Nástěnná malba portrétu na schodišti" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="patina" data-popis="Filmová budka zestárlá patinou tak, aby jí kamera uvěřila."><img src="assets/g-budka.jpg" alt="Filmová rekvizita — patinovaná budka" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="patina" data-popis="Zelená stříška se zlacenými ornamenty — zakázková práce z dílny."><img src="assets/g-striska.jpg" alt="Stříška se zlacenými ornamenty" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Perokresba ze skicáře — surreální tváře propletené jedním tahem."><img src="assets/g-kresba.jpg" alt="Perokresba surreálních tváří" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Dvě tváře a dětský portrét — kresba propletená jedním gestem."><img src="assets/g-tvare.jpg" alt="Kresba dvou tváří s dětským portrétem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Temná hlava vystupující ze tmy — tuš ve stylu starého hororu."><img src="assets/g-upir.jpg" alt="Tušová kresba temné hlavy" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Lučištnice v pustině — dynamická kresba tuší."><img src="assets/g-lucistnice.jpg" alt="Tušová kresba lučištnice" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Siluety strážců na věžích — ilustrace tuší plná napětí."><img src="assets/g-siluety.jpg" alt="Ilustrace siluet na věžích" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Setkání s rohatým stvořením — fantaskní kresba tužkou."><img src="assets/g-stvoreni.jpg" alt="Kresba fantaskního stvoření" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Akt u krbu — jemná kresba tužkou."><img src="assets/g-akt.jpg" alt="Kresba aktu u krbu" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Pohled do jubilejní výstavy — desítky kreseb na jednom místě."><img src="assets/g-vystava.jpg" alt="Sál jubilejní výstavy plný kreseb" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Miloš mezi návštěvníky své výstavy."><img src="assets/g-milos-vystava.jpg" alt="Miloš Kotek na své výstavě" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
     </div>
     <div class="gal-spodek">
       <p class="gal-popis" id="galPopis"></p>
@@ -1269,15 +1266,6 @@ function dilna(){
     .to('.patina-title', {letterSpacing:'0.05em', duration:3, ease:'none'}, 10);
 }
 
-/* ============ MEZIHRA — parallax stropních maleb ============ */
-function mezihra(){
-  if (!hasGsap || reduced) return;
-  gsap.fromTo('#mezImg', {yPercent:-16}, {
-    yPercent:0, ease:'none',
-    scrollTrigger:{trigger:'#mezihra', start:'top bottom', end:'bottom top', scrub:true}
-  });
-}
-
 /* ============ RESTAUROVÁNÍ — po patině se stránka očistí ============ */
 function restaurovani(){
   if (!hasGsap) return;
@@ -1393,8 +1381,16 @@ function galerie(){
   var karty = Array.prototype.slice.call(scena.querySelectorAll('.gal-karta'));
   var popis = document.getElementById('galPopis');
   var cislo = document.getElementById('galCislo');
-  var N = karty.length;
-  document.getElementById('galCelkem').textContent = N;
+  var celkem = document.getElementById('galCelkem');
+
+  /* lupa — viditelné „+" na aktivní kartě */
+  var lupa = document.createElement('div');
+  lupa.className = 'gal-lupa';
+  lupa.textContent = '+';
+
+  var seznam = karty.slice();   /* karty odpovídající aktivnímu filtru */
+  var N = seznam.length;
+  celkem.textContent = N;
 
   var cil = 0, cur = 0, aktivni = -1;
 
@@ -1405,6 +1401,16 @@ function galerie(){
 
   function poloz(){
     var sp = rozestup();
+    for (var j=0;j<karty.length;j++){
+      if (seznam.indexOf(karty[j]) === -1){
+        karty[j].style.opacity = '0';
+        karty[j].style.pointerEvents = 'none';
+        karty[j].style.zIndex = '0';
+        continue;
+      }
+      karty[j].style.opacity = '1';
+      karty[j].style.pointerEvents = 'auto';
+    }
     for (var i=0;i<N;i++){
       var off = i - cur;
       var ao = Math.abs(off);
@@ -1413,24 +1419,43 @@ function galerie(){
       var z = -ao * 110;
       var y = ao * ao * 6;                               /* okraje lehce klesají */
       var sc = Math.max(0.72, 1 - ao * 0.07);
-      karty[i].style.transform = 'translate(-50%,-50%) translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,'+z.toFixed(1)+'px) rotateY('+ry.toFixed(2)+'deg) scale('+sc.toFixed(3)+')';
-      karty[i].style.zIndex = String(100 - Math.round(ao*10));
-      karty[i].querySelector('.zaves').style.opacity = Math.min(0.72, ao * 0.22).toFixed(2);
+      seznam[i].style.transform = 'translate(-50%,-50%) translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,'+z.toFixed(1)+'px) rotateY('+ry.toFixed(2)+'deg) scale('+sc.toFixed(3)+')';
+      seznam[i].style.zIndex = String(100 - Math.round(ao*10));
+      seznam[i].querySelector('.zaves').style.opacity = Math.min(0.72, ao * 0.22).toFixed(2);
     }
     var idx = Math.round(cur);
     idx = Math.max(0, Math.min(N-1, idx));
-    if (idx !== aktivni){
-      if (aktivni >= 0) karty[aktivni].classList.remove('aktivni');
-      karty[idx].classList.add('aktivni');
+    if (idx !== aktivni && seznam[idx]){
+      if (aktivni >= 0 && seznam[aktivni]) seznam[aktivni].classList.remove('aktivni');
+      seznam[idx].classList.add('aktivni');
+      seznam[idx].appendChild(lupa);
       aktivni = idx;
       cislo.textContent = idx + 1;
-      var text = karty[idx].getAttribute('data-popis') || '';
+      var text = seznam[idx].getAttribute('data-popis') || '';
       if (hasGsap){
         gsap.fromTo(popis, {opacity:0, y:8}, {opacity:1, y:0, duration:0.45, ease:'power2.out'});
       }
       popis.textContent = text;
     }
   }
+
+  /* ============ FILTRY — Vše / Olejomalby / Grafika / Reklama / Patina ============ */
+  var tlacitka = document.querySelectorAll('.gal-filtry button');
+  tlacitka.forEach(function(b){
+    b.addEventListener('click', function(){
+      tlacitka.forEach(function(x){ x.classList.remove('aktivni'); });
+      b.classList.add('aktivni');
+      var f = b.getAttribute('data-f');
+      karty.forEach(function(k){ k.classList.remove('aktivni'); });
+      seznam = karty.filter(function(k){
+        return f === 'vse' || k.getAttribute('data-kat') === f;
+      });
+      N = seznam.length;
+      celkem.textContent = N;
+      cil = 0; cur = 0; aktivni = -1;
+      poloz();
+    });
+  });
 
   function smycka(){
     cur += (cil - cur) * 0.11;
@@ -1449,14 +1474,13 @@ function galerie(){
   var tahne = false, startX = 0, startCil = 0, pohnul = false;
   scena.addEventListener('pointerdown', function(e){
     tahne = true; pohnul = false; startX = e.clientX; startCil = cil;
-    scena.classList.add('tahne');
     scena.setPointerCapture && scena.setPointerCapture(e.pointerId);
   });
   scena.addEventListener('pointermove', function(e){
     if (!tahne) return;
     var dx = e.clientX - startX;
-    if (Math.abs(dx) > 4) pohnul = true;
-    cil = Math.max(-0.4, Math.min(N-0.6, startCil - dx / rozestup()));
+    if (Math.abs(dx) > 12){ pohnul = true; scena.classList.add('tahne'); }
+    if (pohnul) cil = Math.max(-0.4, Math.min(N-0.6, startCil - dx / rozestup()));
   });
   function pust(){
     if (!tahne) return;
@@ -1472,10 +1496,11 @@ function galerie(){
   var lb = document.getElementById('lightbox');
   var lbImg = document.getElementById('lbImg');
   var lbPopis = document.getElementById('lbPopis');
-  function otevriLb(i){
-    var img = karty[i].querySelector('img');
+  function otevriLb(k){
+    if (!k) return;
+    var img = k.querySelector('img');
     lbImg.src = img.src; lbImg.alt = img.alt;
-    lbPopis.textContent = karty[i].getAttribute('data-popis') || '';
+    lbPopis.textContent = k.getAttribute('data-popis') || '';
     lb.classList.add('otevreny');
     lb.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -1490,10 +1515,12 @@ function galerie(){
   });
 
   /* klik: aktivní karta se zvětší, ostatní se vycentrují */
-  karty.forEach(function(k, i){
+  karty.forEach(function(k){
     k.addEventListener('click', function(){
       if (pohnul) return;
-      if (i === Math.round(cil)) otevriLb(i);
+      var i = seznam.indexOf(k);
+      if (i === -1) return;
+      if (i === Math.round(cil)) otevriLb(k);
       else cil = i;
     });
   });
@@ -1508,8 +1535,8 @@ function galerie(){
     var vLb = lb.classList.contains('otevreny');
     if (e.key === 'Escape' && vLb){ zavriLb(); return; }
     if (!naObrazovce && !vLb) return;
-    if (e.key === 'ArrowRight'){ jdi(1); e.preventDefault(); if (vLb) otevriLb(Math.round(cil)); }
-    if (e.key === 'ArrowLeft'){ jdi(-1); e.preventDefault(); if (vLb) otevriLb(Math.round(cil)); }
+    if (e.key === 'ArrowRight'){ jdi(1); e.preventDefault(); if (vLb) otevriLb(seznam[Math.round(cil)]); }
+    if (e.key === 'ArrowLeft'){ jdi(-1); e.preventDefault(); if (vLb) otevriLb(seznam[Math.round(cil)]); }
   });
 
   window.addEventListener('resize', poloz);
@@ -1548,7 +1575,6 @@ window.addEventListener('load', function(){
   intro();
   heroScroll();
   manifest();
-  mezihra();
   dilna();
   restaurovani();
   nit();
