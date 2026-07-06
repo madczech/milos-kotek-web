@@ -76,6 +76,21 @@ nav .links a{opacity:.7;transition:opacity .25s}
 nav .links a:hover{opacity:1}
 @media(max-width:760px){nav .links{display:none}}
 
+/* kontakt v horní liště */
+.nav-kontakt{
+  display:flex;align-items:center;gap:1rem;margin-left:1.6rem;margin-right:auto;
+  font-size:.78rem;letter-spacing:.08em;color:var(--fg);
+}
+.nav-kontakt a{opacity:.75;transition:opacity .25s;display:flex;align-items:center;gap:.4rem}
+.nav-kontakt a:hover{opacity:1}
+.nav-kontakt svg{width:13px;height:13px;stroke:var(--akcent)}
+.nav-kontakt .del{opacity:.3}
+@media(max-width:1150px){.nav-kontakt .mail-txt{display:none}}
+@media(max-width:760px){
+  .nav-kontakt{margin-left:auto;margin-right:.8rem}
+  .nav-kontakt .del,.nav-kontakt .mail{display:none}
+}
+
 /* mobilní menu */
 .burger{
   display:none;background:none;border:none;cursor:pointer;padding:.6rem;
@@ -294,6 +309,59 @@ h2.title em{font-style:italic;color:var(--akcent);font-weight:300}
 }
 #akt-patina .text{margin:2rem auto 0}
 
+/* ============ GALERIE — zakřivený pás děl ============ */
+#galerie{overflow:hidden}
+#galerie .wrap{padding-bottom:clamp(3rem,7vh,5rem)}
+.gal-scena{
+  position:relative;height:clamp(340px,52vh,520px);margin-top:2.5rem;
+  perspective:1400px;perspective-origin:50% 45%;
+  cursor:grab;user-select:none;-webkit-user-select:none;touch-action:pan-y;
+}
+.gal-scena.tahne{cursor:grabbing}
+.gal-karta{
+  position:absolute;top:50%;left:50%;
+  width:clamp(200px,24vw,300px);aspect-ratio:3/4;
+  transform-style:preserve-3d;will-change:transform,opacity;
+  border-radius:4px;overflow:hidden;
+  box-shadow:0 30px 70px -18px rgba(0,0,0,.85);
+  background:#191510;
+}
+.gal-karta img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  pointer-events:none;-webkit-user-drag:none;
+}
+.gal-karta::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(239,233,223,.1)}
+.gal-karta .zaves{position:absolute;inset:0;background:#0e0d0b;opacity:0;transition:opacity .2s;pointer-events:none}
+.gal-spodek{
+  display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
+  margin-top:2.2rem;flex-wrap:wrap;
+}
+.gal-popis{
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:clamp(1rem,2vw,1.3rem);color:var(--dim);
+  max-width:52ch;min-height:2.6em;
+}
+.gal-popis strong{color:var(--fg);font-weight:600;font-style:normal}
+.gal-ovladani{display:flex;align-items:center;gap:1rem;margin-left:auto}
+.gal-pocitadlo{font-size:.75rem;letter-spacing:.25em;color:var(--dim);white-space:nowrap}
+.gal-pocitadlo b{color:var(--akcent);font-weight:500}
+.gal-sipka{
+  width:52px;height:52px;border-radius:50%;cursor:pointer;
+  border:1px solid rgba(239,233,223,.25);background:none;color:var(--fg);
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .3s,background .3s,transform .2s;
+}
+.gal-sipka:hover{border-color:var(--akcent);background:rgba(212,162,76,.1)}
+.gal-sipka:active{transform:scale(.92)}
+.gal-sipka svg{width:20px;height:20px}
+.gal-napoveda{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);opacity:.6;margin-top:.6rem}
+@media(max-width:760px){
+  .gal-scena{height:clamp(300px,46vh,420px)}
+  .gal-karta{width:min(58vw,240px)}
+  .gal-popis{min-height:3.4em;font-size:.95rem}
+  .gal-sipka{width:44px;height:44px}
+}
+
 /* ============ ZAKÁZKA ============ */
 #zakazka .wrap{text-align:center}
 #zakazka .kicker{justify-content:center}
@@ -473,9 +541,15 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 
 <nav id="nav">
   <a class="logo" href="#hero">M. Kotek</a>
+  <div class="nav-kontakt">
+    <a href="tel:+420721805808"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>721 805 808</a>
+    <span class="del">·</span>
+    <a class="mail" href="mailto:milkot@atlas.cz"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg><span class="mail-txt">milkot@atlas.cz</span></a>
+  </div>
   <div class="links">
     <a href="#manifest">Mistr</a>
     <a href="#dilna">Řemesla</a>
+    <a href="#galerie">Galerie</a>
     <a href="#projekty">Projekty</a>
     <a href="#zakazka">Zakázka</a>
     <a href="#cenik">Ceník</a>
@@ -488,11 +562,12 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 <div id="mobmenu">
   <a href="#manifest">Mistr<span class="mn">02</span></a>
   <a href="#dilna">Řemesla<span class="mn">03</span></a>
-  <a href="#projekty">Projekty<span class="mn">06</span></a>
-  <a href="#zakazka">Zakázka<span class="mn">07</span></a>
-  <a href="#cenik">Ceník<span class="mn">08</span></a>
-  <a href="#faq">Otázky<span class="mn">09</span></a>
-  <a href="#kontakt">Kontakt<span class="mn">10</span></a>
+  <a href="#galerie">Galerie<span class="mn">06</span></a>
+  <a href="#projekty">Projekty<span class="mn">07</span></a>
+  <a href="#zakazka">Zakázka<span class="mn">08</span></a>
+  <a href="#cenik">Ceník<span class="mn">09</span></a>
+  <a href="#faq">Otázky<span class="mn">10</span></a>
+  <a href="#kontakt">Kontakt<span class="mn">11</span></a>
 </div>
 
 <!-- NIT — propojuje celý web, roste se scrollem -->
@@ -583,10 +658,41 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
   </div>
 </section>
 
-<!-- 06 PROJEKTY -->
+<!-- 06 GALERIE -->
+<section id="galerie" data-theme="ink" data-stitek="galerie">
+  <div class="wrap">
+    <div class="kicker"><span class="num">06</span> Galerie</div>
+    <h2 class="title reveal">Projděte si<br><em>dílnu zblízka</em></h2>
+    <div class="gal-scena" id="galScena">
+      <div class="gal-karta" data-popis="Zlatá tvář s věží — signovaný olej, jeden z vrcholů autorské tvorby."><img src="assets/malba-strazce.jpg" alt="Olejomalba — zlatá tvář s věží" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Tvář obtočená spirálami drobných postav — akryl na černém plátně."><img src="assets/malba-spirala.jpg" alt="Malba — tvář se spirálami postav" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Akvarelová ilustrace — souboj člověka s hmyzím obrem v pusté krajině."><img src="assets/malba-akvarel.jpg" alt="Akvarel — souboj s hmyzím monstrem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Dvě protáhlé hlavy ve výkřiku — olej na zeleném plátně."><img src="assets/malba-hlavy.jpg" alt="Olej — dvě hlavy ve výkřiku" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Ručně malovaný nápis Na Podskále přímo na štítu penzionu."><img src="assets/g-podskale.jpg" alt="Malovaný štít Na Podskále" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Heraldická orlice s monogramem — malba provedená přímo na stěnu."><img src="assets/g-orlice.jpg" alt="Nástěnná malba orlice s monogramem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Miloš na lešení při práci na velkoformátové nástěnné malbě."><img src="assets/g-leseni.jpg" alt="Miloš Kotek na lešení při malbě" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Portrét s dobovou typografií rostoucí podél schodiště."><img src="assets/g-schodiste.jpg" alt="Nástěnná malba portrétu na schodišti" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Filmová budka zestárlá patinou tak, aby jí kamera uvěřila."><img src="assets/g-budka.jpg" alt="Filmová rekvizita — patinovaná budka" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Zelená stříška se zlacenými ornamenty — zakázková práce z dílny."><img src="assets/g-striska.jpg" alt="Stříška se zlacenými ornamenty" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Perokresba ze skicáře — surreální tváře propletené jedním tahem."><img src="assets/g-kresba.jpg" alt="Perokresba surreálních tváří" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Barevná zakázková ilustrace — večer v horách plný života."><img src="assets/grafika-ilustrace.jpg" alt="Barevná ilustrace hor" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+    </div>
+    <div class="gal-spodek">
+      <p class="gal-popis" id="galPopis"></p>
+      <div class="gal-ovladani">
+        <div class="gal-pocitadlo"><b id="galCislo">1</b> / <span id="galCelkem">12</span></div>
+        <button class="gal-sipka" id="galZpet" aria-label="Předchozí dílo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></button>
+        <button class="gal-sipka" id="galDal" aria-label="Další dílo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+    <div class="gal-napoveda">táhněte myší nebo prstem · šipky na klávesnici</div>
+  </div>
+</section>
+
+<!-- 07 PROJEKTY -->
 <section id="projekty" data-theme="ink" data-stitek="projekty">
   <div class="wrap">
-    <div class="kicker"><span class="num">06</span> Projekty</div>
+    <div class="kicker"><span class="num">07</span> Projekty</div>
     <h2 class="title reveal">Ruce, které znají<br><em>značky i filmová plátna</em></h2>
     <p class="lead reveal">Výběr z prací, kterými prošel jeho štětec — od restaurací přes muzejní expozice po filmové kulisy.</p>
     <div class="proj-list">
@@ -610,7 +716,7 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 <!-- 07 ZAKÁZKA -->
 <section id="zakazka" data-theme="zlato" data-stitek="zakázka">
   <div class="wrap">
-    <div class="kicker"><span class="num">07</span> Zakázková malba</div>
+    <div class="kicker"><span class="num">08</span> Zakázková malba</div>
     <h2 class="title reveal">Máte stěnu, štít<br>nebo <em>nápad?</em></h2>
     <p class="lead reveal">Zakázková malba na míru — od obrazu do interiéru přes malovaný štít až po patinu na míru. Napište, co máte v hlavě, a domluvíme se na cestě k tomu.</p>
     <div class="zak-ukazky">
@@ -626,7 +732,7 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 <!-- 07 CENÍK -->
 <section id="cenik" data-theme="ink" data-stitek="ceník">
   <div class="wrap">
-    <div class="kicker"><span class="num">08</span> Ceník</div>
+    <div class="kicker"><span class="num">09</span> Ceník</div>
     <h2 class="title reveal">Poctivá práce,<br><em>poctivá cena</em></h2>
     <p class="lead reveal">Každá zakázka je jiná — proto je cena vždy dohodou po první nezávazné konzultaci. Orientačně:</p>
     <div class="cenik-grid">
@@ -656,7 +762,7 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 <!-- 08 FAQ -->
 <section id="faq" data-theme="ink" data-stitek="otázky">
   <div class="wrap">
-    <div class="kicker"><span class="num">09</span> Časté otázky</div>
+    <div class="kicker"><span class="num">10</span> Časté otázky</div>
     <h2 class="title reveal">Na co se ptáte<br><em>nejčastěji</em></h2>
     <div class="faq-list">
       <div class="faq-item">
@@ -686,7 +792,7 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 <!-- 09 KONTAKT -->
 <section id="kontakt" data-theme="ink" data-stitek="kontakt">
   <div class="wrap">
-    <div class="kicker"><span class="num">10</span> Kontakt</div>
+    <div class="kicker"><span class="num">11</span> Kontakt</div>
     <h2 class="title reveal">Domluvme se<br><em>na první barvě</em></h2>
     <div class="kontakt-hlavni">
       <a class="kontakt-radek reveal" href="mailto:milkot@atlas.cz"><span class="lbl">e-mail</span><span class="val">milkot@atlas.cz</span></a>
@@ -1115,7 +1221,7 @@ function mezihra(){
 function restaurovani(){
   if (!hasGsap) return;
   ScrollTrigger.create({
-    trigger:'#projekty', start:'top 75%',
+    trigger:'#galerie', start:'top 75%',
     onEnter:function(){
       tema('ink', 1.4);
       gsap.to('#koroze', {opacity:0, duration:1.6, ease:'power2.out'});
@@ -1219,6 +1325,110 @@ function faq(){
   });
 }
 
+/* ============ GALERIE — zakřivený 3D pás ============ */
+function galerie(){
+  var scena = document.getElementById('galScena');
+  if (!scena) return;
+  var karty = Array.prototype.slice.call(scena.querySelectorAll('.gal-karta'));
+  var popis = document.getElementById('galPopis');
+  var cislo = document.getElementById('galCislo');
+  var N = karty.length;
+  document.getElementById('galCelkem').textContent = N;
+
+  var cil = 0, cur = 0, aktivni = -1;
+
+  function rozestup(){
+    var w = karty[0].offsetWidth || 260;
+    return w * 0.82;
+  }
+
+  function poloz(){
+    var sp = rozestup();
+    for (var i=0;i<N;i++){
+      var off = i - cur;
+      var ao = Math.abs(off);
+      var x = off * sp;
+      var ry = Math.max(-58, Math.min(58, -off * 16));   /* zakřivení sféry */
+      var z = -ao * 110;
+      var y = ao * ao * 6;                               /* okraje lehce klesají */
+      var sc = Math.max(0.72, 1 - ao * 0.07);
+      karty[i].style.transform = 'translate(-50%,-50%) translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,'+z.toFixed(1)+'px) rotateY('+ry.toFixed(2)+'deg) scale('+sc.toFixed(3)+')';
+      karty[i].style.zIndex = String(100 - Math.round(ao*10));
+      karty[i].querySelector('.zaves').style.opacity = Math.min(0.72, ao * 0.22).toFixed(2);
+    }
+    var idx = Math.round(cur);
+    idx = Math.max(0, Math.min(N-1, idx));
+    if (idx !== aktivni){
+      aktivni = idx;
+      cislo.textContent = idx + 1;
+      var text = karty[idx].getAttribute('data-popis') || '';
+      if (hasGsap){
+        gsap.fromTo(popis, {opacity:0, y:8}, {opacity:1, y:0, duration:0.45, ease:'power2.out'});
+      }
+      popis.textContent = text;
+    }
+  }
+
+  function smycka(){
+    cur += (cil - cur) * 0.11;
+    if (Math.abs(cil - cur) < 0.001) cur = cil;
+    poloz();
+    requestAnimationFrame(smycka);
+  }
+
+  function jdi(delta){
+    cil = Math.max(0, Math.min(N-1, Math.round(cil) + delta));
+  }
+  document.getElementById('galDal').addEventListener('click', function(){ jdi(1); });
+  document.getElementById('galZpet').addEventListener('click', function(){ jdi(-1); });
+
+  /* tažení myší i prstem */
+  var tahne = false, startX = 0, startCil = 0, pohnul = false;
+  scena.addEventListener('pointerdown', function(e){
+    tahne = true; pohnul = false; startX = e.clientX; startCil = cil;
+    scena.classList.add('tahne');
+    scena.setPointerCapture && scena.setPointerCapture(e.pointerId);
+  });
+  scena.addEventListener('pointermove', function(e){
+    if (!tahne) return;
+    var dx = e.clientX - startX;
+    if (Math.abs(dx) > 4) pohnul = true;
+    cil = Math.max(-0.4, Math.min(N-0.6, startCil - dx / rozestup()));
+  });
+  function pust(){
+    if (!tahne) return;
+    tahne = false;
+    scena.classList.remove('tahne');
+    cil = Math.max(0, Math.min(N-1, Math.round(cil)));
+  }
+  scena.addEventListener('pointerup', pust);
+  scena.addEventListener('pointercancel', pust);
+  scena.addEventListener('pointerleave', pust);
+
+  /* klik na kartu = přejdi na ni */
+  karty.forEach(function(k, i){
+    k.addEventListener('click', function(){
+      if (!pohnul) cil = i;
+    });
+  });
+
+  /* šipky na klávesnici, když je galerie na obrazovce */
+  var naObrazovce = false;
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(en){ naObrazovce = en[0].isIntersecting; },{threshold:0.3})
+      .observe(scena);
+  }
+  window.addEventListener('keydown', function(e){
+    if (!naObrazovce) return;
+    if (e.key === 'ArrowRight'){ jdi(1); e.preventDefault(); }
+    if (e.key === 'ArrowLeft'){ jdi(-1); e.preventDefault(); }
+  });
+
+  window.addEventListener('resize', poloz);
+  poloz();
+  smycka();
+}
+
 /* ============ MOBILNÍ MENU ============ */
 function menu(){
   var b = document.getElementById('burger');
@@ -1256,6 +1466,7 @@ window.addEventListener('load', function(){
   nit();
   scrollFx();
   magnet();
+  galerie();
   faq();
   menu();
   anchors();
