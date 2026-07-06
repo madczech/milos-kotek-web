@@ -524,23 +524,32 @@ footer{
 }
 footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 
-/* ============ MOBIL & TABLET — doladění ============ */
+/* ============ MOBIL & TABLET — dílna se stohuje, nic se neztrácí ============ */
 @media(max-width:760px){
+  #manifest{height:300vh}
   #manifest .portret{height:auto;width:min(80vw,58vh)}
   #manifest .veta{padding:0 1.2rem}
   .kontakt-radek{gap:.6rem}
+
+  /* dějství pod sebou — každé s vlastním pozadím a plnou výškou obsahu */
+  #dilna .ram{height:auto;overflow:visible}
+  #dilna .akt{
+    position:relative;inset:auto;clip-path:none!important;opacity:1;
+    min-height:0;padding:4.5rem 1.2rem 3.5rem;
+  }
+  .malba-scena{display:block;height:auto}
+  .platna{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:1.8rem}
+  .platno-k{position:relative;inset:auto;width:100%!important;aspect-ratio:3/4;box-shadow:0 16px 40px -12px rgba(0,0,0,.7)}
+  .pk3{grid-column:1/3;aspect-ratio:16/10}
+  #akt-pismo svg.napis{margin:1.6rem 0 1rem}
 }
 @media(max-width:560px){
-  .akt{padding:4.4rem 1.1rem 1.4rem}
-  .akt h3{font-size:1.65rem}
-  .akt .text{font-size:.88rem}
-  .malba-scena{gap:1rem}
-  .platna{height:32vh}
-  .malba-pozn{font-size:1.05rem;margin-top:.8rem}
-  #akt-pismo svg.napis{margin:1.2rem 0 .8rem}
-  .pismo-radky{gap:.9rem;margin-top:1.4rem}
+  .akt h3{font-size:1.75rem}
+  .akt .text{font-size:.9rem}
+  .malba-pozn{font-size:1.05rem;margin-top:1rem}
+  .pismo-radky{gap:.9rem;margin-top:1.6rem}
   .pismo-radky span{font-size:.62rem;padding-top:.5rem}
-  #akt-patina .text{margin-top:1.2rem}
+  #akt-patina .text{margin-top:1.4rem}
   .zak-foto{width:min(240px,78vw)}
   .zak-foto:nth-child(2){transform:rotate(2.4deg)}
   footer{justify-content:center;text-align:center}
@@ -561,6 +570,9 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 .staticky#dilna .ram{height:auto;overflow:visible}
 .staticky#dilna .akt{position:relative;clip-path:none!important;min-height:100vh}
 .staticky .reveal{opacity:1!important;transform:none!important}
+@media(max-width:760px){
+  .staticky#dilna .akt{min-height:0}
+}
 </style>
 </head>
 <body>
@@ -867,9 +879,13 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 (function(){
 'use strict';
 var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var mobil = window.matchMedia('(max-width: 760px)').matches;
 var hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
 var hasThree = typeof THREE !== 'undefined';
-if (hasGsap) gsap.registerPlugin(ScrollTrigger);
+if (hasGsap){
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ignoreMobileResize:true});   /* klidný scroll na mobilu (adresní řádek) */
+}
 
 /* ============ PALETY DĚJSTVÍ — celá stránka mění kůži ============ */
 var PALETY = {
@@ -1199,10 +1215,63 @@ function manifest(){
     .to(veta, {opacity:1, y:0, duration:1, ease:'none'}, slova.length*3 - 1);
 }
 
+/* ============ DÍLNA (mobil) — dějství pod sebou, ale se vší parádou ============ */
+function dilnaMobil(){
+  /* témata se přepínají podle dějství i na mobilu */
+  [['#akt-malba','malba'],['#akt-pismo','pismo'],['#akt-patina','patina']].forEach(function(p){
+    ScrollTrigger.create({
+      trigger:p[0], start:'top 60%', end:'bottom 40%',
+      onEnter:function(){ tema(p[1], 0.9); },
+      onEnterBack:function(){ tema(p[1], 0.9); }
+    });
+  });
+
+  /* obsah dějství připlouvá */
+  gsap.utils.toArray('#dilna .akt').forEach(function(akt){
+    gsap.from(akt.querySelectorAll('.kicker, h3, .text, .malba-pozn, .pismo-radky, .patina-title'), {
+      y:36, opacity:0, duration:0.9, ease:'power3.out', stagger:0.1,
+      scrollTrigger:{trigger:akt, start:'top 75%'}
+    });
+  });
+  gsap.from('.platno-k', {
+    y:50, opacity:0, duration:0.8, ease:'power3.out', stagger:0.12,
+    scrollTrigger:{trigger:'.platna', start:'top 82%'}
+  });
+
+  /* písmo se kreslí, když na něj dojede scroll */
+  var napis = document.getElementById('napisText');
+  try{
+    var delka = Math.ceil(napis.getComputedTextLength());
+    napis.style.strokeDasharray = delka;
+    napis.style.strokeDashoffset = delka;
+    napis.setAttribute('fill', '#e8c987');
+    napis.style.fillOpacity = 0;
+    gsap.timeline({scrollTrigger:{trigger:'#akt-pismo', start:'top 65%'}})
+      .to(napis, {strokeDashoffset:0, duration:2.6, ease:'power1.inOut'})
+      .to(napis, {fillOpacity:0.95, duration:0.9}, '-=0.5');
+  }catch(e){}
+
+  /* patina rezaví s posunem prstu */
+  var displace = document.getElementById('rezDisplace');
+  var dScale = {v:0};
+  gsap.timeline({
+    scrollTrigger:{trigger:'#akt-patina', start:'top 70%', end:'bottom 20%', scrub:0.5}
+  })
+    .to('#rez', {opacity:1, ease:'none', duration:3}, 0)
+    .to(dScale, {v:30, ease:'none', duration:3,
+        onUpdate:function(){ if(displace) displace.setAttribute('scale', dScale.v.toFixed(1)); }}, 0.4)
+    .to('#koroze', {opacity:0.5, ease:'none', duration:3}, 0)
+    .to('html', {'--zrno':0.8, ease:'none', duration:3}, 0);
+}
+
 /* ============ DÍLNA — tři dějství, celá stránka mění kůži ============ */
 function dilna(){
   var sekce = document.getElementById('dilna');
-  if (!hasGsap || reduced){ sekce.classList.add('staticky'); return; }
+  if (!hasGsap || reduced || mobil){
+    sekce.classList.add('staticky');
+    if (hasGsap && !reduced) dilnaMobil();
+    return;
+  }
 
   var napis = document.getElementById('napisText');
   var delka = 0;
