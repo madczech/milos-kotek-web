@@ -68,8 +68,10 @@ nav{
   padding:1.4rem clamp(1.2rem,4vw,3rem);
   transition:transform .4s ease;
 }
-nav.hidden{transform:translateY(-110%)}
-body.menu-open nav{transform:none}
+nav.hidden{opacity:.3}
+nav:hover{opacity:1}
+nav{transition:transform .4s ease, opacity .45s ease}
+body.menu-open nav{transform:none;opacity:1}
 nav .logo{font-family:var(--serif);font-weight:600;font-size:1.05rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fg)}
 nav .links{display:flex;gap:1.8rem;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--fg)}
 nav .links a{opacity:.7;transition:opacity .25s}
@@ -112,6 +114,13 @@ body.menu-open #mobmenu{opacity:1;visibility:visible}
   display:flex;justify-content:space-between;align-items:baseline;
 }
 #mobmenu a .mn{font-family:var(--sans);font-size:.7rem;letter-spacing:.25em;color:var(--akcent)}
+#mobmenu .mm-kontakt{
+  margin-top:1.6rem;display:flex;flex-direction:column;gap:.3rem;
+}
+#mobmenu .mm-kontakt a{
+  font-family:var(--sans);font-size:1rem;font-weight:400;border:none;
+  color:var(--akcent);padding:.2rem 0;
+}
 body.menu-open{overflow:hidden}
 
 /* ============ NIT — svislá linka propojující celý web ============ */
@@ -259,9 +268,11 @@ h2.title em{font-style:italic;color:var(--akcent);font-weight:300}
   background-size:cover;background-position:center;
 }
 .platno-k::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(239,233,223,.08)}
-.pk1{width:50%;aspect-ratio:3/4;left:0;top:4%;background-image:url('assets/malba-strazce.jpg');z-index:3}
-.pk2{width:42%;aspect-ratio:1/1;right:8%;top:0;background-image:url('assets/malba-spirala.jpg');z-index:2}
-.pk3{width:46%;aspect-ratio:4/3;right:0;bottom:0;background-image:url('assets/malba-akvarel.jpg');z-index:1}
+.pk1{width:44%;aspect-ratio:3/4;left:0;top:2%;background-image:url('assets/malba-strazce.jpg');z-index:3}
+.pk2{width:36%;aspect-ratio:1/1;right:10%;top:0;background-image:url('assets/malba-spirala.jpg');z-index:2}
+.pk3{width:38%;aspect-ratio:4/3;right:0;bottom:2%;background-image:url('assets/malba-akvarel.jpg');z-index:1}
+.pk4{width:27%;aspect-ratio:3/4.4;left:36%;bottom:0;background-image:url('assets/g-tvare.jpg');z-index:4}
+.pk5{width:22%;aspect-ratio:3/4.5;right:36%;top:34%;background-image:url('assets/g-upir.jpg');z-index:5;box-shadow:0 24px 55px -14px rgba(0,0,0,.9)}
 .malba-pozn{font-family:var(--hand);font-size:1.25rem;color:var(--akcent);margin-top:1.4rem;opacity:.85}
 
 /* ============ MEZIHRA — stropní malby ============ */
@@ -361,6 +372,34 @@ h2.title em{font-style:italic;color:var(--akcent);font-weight:300}
   .gal-popis{min-height:3.4em;font-size:.95rem}
   .gal-sipka{width:44px;height:44px}
 }
+
+/* ============ LIGHTBOX — zvětšení díla ============ */
+#lightbox{
+  position:fixed;inset:0;z-index:9000;
+  background:rgba(10,9,7,.95);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.2rem;
+  opacity:0;visibility:hidden;transition:opacity .4s ease, visibility .4s;
+  padding:clamp(1rem,4vw,3rem);cursor:zoom-out;
+}
+#lightbox.otevreny{opacity:1;visibility:visible}
+#lightbox img{
+  max-width:min(1100px,94vw);max-height:78vh;object-fit:contain;
+  border-radius:3px;box-shadow:0 40px 120px -20px rgba(0,0,0,.9);
+  cursor:default;transform:scale(.94);transition:transform .45s cubic-bezier(.16,1,.3,1);
+}
+#lightbox.otevreny img{transform:scale(1)}
+#lightbox figcaption{
+  font-family:var(--serif);font-style:italic;font-size:clamp(.95rem,1.8vw,1.2rem);
+  color:var(--dim);text-align:center;max-width:60ch;
+}
+#lightbox .lb-zavrit{
+  position:absolute;top:1.2rem;right:1.4rem;
+  width:48px;height:48px;border-radius:50%;border:1px solid rgba(239,233,223,.3);
+  background:none;color:var(--fg);font-size:1.5rem;line-height:1;cursor:pointer;
+  transition:border-color .3s, transform .3s;
+}
+#lightbox .lb-zavrit:hover{border-color:var(--akcent);transform:rotate(90deg)}
+.gal-karta.aktivni{cursor:zoom-in}
 
 /* ============ ZAKÁZKA ============ */
 #zakazka .wrap{text-align:center}
@@ -568,6 +607,17 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
   <a href="#cenik">Ceník<span class="mn">09</span></a>
   <a href="#faq">Otázky<span class="mn">10</span></a>
   <a href="#kontakt">Kontakt<span class="mn">11</span></a>
+  <div class="mm-kontakt">
+    <a href="tel:+420721805808">721 805 808</a>
+    <a href="mailto:milkot@atlas.cz">milkot@atlas.cz</a>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" aria-hidden="true">
+  <button class="lb-zavrit" aria-label="Zavřít">✕</button>
+  <img id="lbImg" src="" alt="">
+  <figcaption id="lbPopis"></figcaption>
 </div>
 
 <!-- NIT — propojuje celý web, roste se scrollem -->
@@ -675,7 +725,14 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
       <div class="gal-karta" data-popis="Filmová budka zestárlá patinou tak, aby jí kamera uvěřila."><img src="assets/g-budka.jpg" alt="Filmová rekvizita — patinovaná budka" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
       <div class="gal-karta" data-popis="Zelená stříška se zlacenými ornamenty — zakázková práce z dílny."><img src="assets/g-striska.jpg" alt="Stříška se zlacenými ornamenty" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
       <div class="gal-karta" data-popis="Perokresba ze skicáře — surreální tváře propletené jedním tahem."><img src="assets/g-kresba.jpg" alt="Perokresba surreálních tváří" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-popis="Barevná zakázková ilustrace — večer v horách plný života."><img src="assets/grafika-ilustrace.jpg" alt="Barevná ilustrace hor" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Dvě tváře a dětský portrét — kresba propletená jedním gestem."><img src="assets/g-tvare.jpg" alt="Kresba dvou tváří s dětským portrétem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Temná hlava vystupující ze tmy — tuš ve stylu starého hororu."><img src="assets/g-upir.jpg" alt="Tušová kresba temné hlavy" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Lučištnice v pustině — dynamická kresba tuší."><img src="assets/g-lucistnice.jpg" alt="Tušová kresba lučištnice" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Siluety strážců na věžích — ilustrace tuší plná napětí."><img src="assets/g-siluety.jpg" alt="Ilustrace siluet na věžích" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Setkání s rohatým stvořením — fantaskní kresba tužkou."><img src="assets/g-stvoreni.jpg" alt="Kresba fantaskního stvoření" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Akt u krbu — jemná kresba tužkou."><img src="assets/g-akt.jpg" alt="Kresba aktu u krbu" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Pohled do jubilejní výstavy — desítky kreseb na jednom místě."><img src="assets/g-vystava.jpg" alt="Sál jubilejní výstavy plný kreseb" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-popis="Miloš mezi návštěvníky své výstavy."><img src="assets/g-milos-vystava.jpg" alt="Miloš Kotek na své výstavě" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
     </div>
     <div class="gal-spodek">
       <p class="gal-popis" id="galPopis"></p>
@@ -721,7 +778,7 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
     <p class="lead reveal">Zakázková malba na míru — od obrazu do interiéru přes malovaný štít až po patinu na míru. Napište, co máte v hlavě, a domluvíme se na cestě k tomu.</p>
     <div class="zak-ukazky">
       <div class="zak-foto reveal"><img src="assets/malba-hlavy.jpg" alt="Obraz na zakázku — dvě hlavy, olej na plátně" loading="lazy" decoding="async"><div class="pop">olej na plátně</div></div>
-      <div class="zak-foto reveal"><img src="assets/grafika-ilustrace.jpg" alt="Zakázková ilustrace — barevná krajina" loading="lazy" decoding="async"><div class="pop">zakázková ilustrace</div></div>
+      <div class="zak-foto reveal"><img src="assets/g-striska.jpg" alt="Zakázková stříška se zlacenými ornamenty" loading="lazy" decoding="async"><div class="pop">zakázková patina &amp; zlacení</div></div>
     </div>
     <a class="cta" id="cta" href="mailto:milkot@atlas.cz">Napsat Milošovi
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -1175,9 +1232,13 @@ function dilna(){
   tl.from('.pk1', {y:120, opacity:0, rotation:-4, duration:1.2, ease:'none'}, 0)
     .from('.pk2', {y:160, opacity:0, rotation:3, duration:1.2, ease:'none'}, 0.25)
     .from('.pk3', {y:200, opacity:0, rotation:-2, duration:1.2, ease:'none'}, 0.5)
+    .from('.pk4', {y:180, opacity:0, rotation:5, duration:1.2, ease:'none'}, 0.7)
+    .from('.pk5', {y:140, opacity:0, rotation:-6, duration:1.2, ease:'none'}, 0.9)
     .to('.pk1', {y:-25, duration:1.4, ease:'none'}, 1.6)
     .to('.pk2', {y:-45, duration:1.4, ease:'none'}, 1.6)
-    .to('.pk3', {y:-12, duration:1.4, ease:'none'}, 1.6);
+    .to('.pk3', {y:-12, duration:1.4, ease:'none'}, 1.6)
+    .to('.pk4', {y:-35, duration:1.4, ease:'none'}, 1.6)
+    .to('.pk5', {y:-55, duration:1.4, ease:'none'}, 1.6);
 
   /* — dějství I odchází dřív, než se rozlije další — */
   tl.to('.malba-scena', {opacity:0, y:-70, duration:0.9, ease:'power1.in'}, 2.7);
@@ -1359,6 +1420,8 @@ function galerie(){
     var idx = Math.round(cur);
     idx = Math.max(0, Math.min(N-1, idx));
     if (idx !== aktivni){
+      if (aktivni >= 0) karty[aktivni].classList.remove('aktivni');
+      karty[idx].classList.add('aktivni');
       aktivni = idx;
       cislo.textContent = idx + 1;
       var text = karty[idx].getAttribute('data-popis') || '';
@@ -1405,23 +1468,48 @@ function galerie(){
   scena.addEventListener('pointercancel', pust);
   scena.addEventListener('pointerleave', pust);
 
-  /* klik na kartu = přejdi na ni */
+  /* ============ LIGHTBOX — klik na aktivní dílo ho zvětší ============ */
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbPopis = document.getElementById('lbPopis');
+  function otevriLb(i){
+    var img = karty[i].querySelector('img');
+    lbImg.src = img.src; lbImg.alt = img.alt;
+    lbPopis.textContent = karty[i].getAttribute('data-popis') || '';
+    lb.classList.add('otevreny');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function zavriLb(){
+    lb.classList.remove('otevreny');
+    lb.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  lb.addEventListener('click', function(e){
+    if (e.target === lb || e.target.classList.contains('lb-zavrit')) zavriLb();
+  });
+
+  /* klik: aktivní karta se zvětší, ostatní se vycentrují */
   karty.forEach(function(k, i){
     k.addEventListener('click', function(){
-      if (!pohnul) cil = i;
+      if (pohnul) return;
+      if (i === Math.round(cil)) otevriLb(i);
+      else cil = i;
     });
   });
 
-  /* šipky na klávesnici, když je galerie na obrazovce */
+  /* klávesnice: šipky listují (i v lightboxu), Esc zavírá */
   var naObrazovce = false;
   if ('IntersectionObserver' in window){
     new IntersectionObserver(function(en){ naObrazovce = en[0].isIntersecting; },{threshold:0.3})
       .observe(scena);
   }
   window.addEventListener('keydown', function(e){
-    if (!naObrazovce) return;
-    if (e.key === 'ArrowRight'){ jdi(1); e.preventDefault(); }
-    if (e.key === 'ArrowLeft'){ jdi(-1); e.preventDefault(); }
+    var vLb = lb.classList.contains('otevreny');
+    if (e.key === 'Escape' && vLb){ zavriLb(); return; }
+    if (!naObrazovce && !vLb) return;
+    if (e.key === 'ArrowRight'){ jdi(1); e.preventDefault(); if (vLb) otevriLb(Math.round(cil)); }
+    if (e.key === 'ArrowLeft'){ jdi(-1); e.preventDefault(); if (vLb) otevriLb(Math.round(cil)); }
   });
 
   window.addEventListener('resize', poloz);
