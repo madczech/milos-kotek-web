@@ -278,7 +278,11 @@ h2.title em{font-style:italic;color:var(--akcent);font-weight:300}
 /* dějství II — PÍSMO */
 #akt-pismo{background:radial-gradient(ellipse 100% 80% at 50% 0%,#18271f,#0f1d16 70%);align-items:center;text-align:center;clip-path:circle(0% at 78% 40%)}
 #akt-pismo svg.napis{width:min(860px,94vw);height:auto;margin:2.4rem 0 1.6rem;overflow:visible}
-#akt-pismo svg.napis path{fill:none;stroke:#e8c987;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+#akt-pismo svg.napis path{
+  fill:none;stroke:#e8c987;stroke-width:10;
+  stroke-linecap:round;stroke-linejoin:round;
+  filter:url(#stetecFiltr);   /* živá hrana tahu jako tuš na papíře */
+}
 #akt-pismo .text{margin:0 auto}
 .pismo-radky{display:flex;gap:clamp(1.4rem,4vw,3.5rem);margin-top:2.4rem;flex-wrap:wrap;justify-content:center}
 .pismo-radky span{font-size:.75rem;letter-spacing:.28em;text-transform:uppercase;color:#a8b2a4;border-top:1px solid rgba(232,201,135,.3);padding-top:.8rem}
@@ -586,6 +590,10 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
   <filter id="rezFiltr">
     <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="4" seed="7" result="noise"/>
     <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" id="rezDisplace"/>
+  </filter>
+  <filter id="stetecFiltr" x="-15%" y="-15%" width="130%" height="130%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="4" seed="11" result="ink"/>
+    <feDisplacementMap in="SourceGraphic" in2="ink" scale="9"/>
   </filter>
 </svg>
 
@@ -1267,8 +1275,8 @@ function dilnaMobil(){
   pripravNapis();
   if (tahyNapisu.length){
     gsap.timeline({scrollTrigger:{trigger:'#akt-pismo', start:'top 65%'}})
-      .add(kresliNapis(3.4))
-      .to(tahyNapisu, {stroke:'#f6e3ae', strokeWidth:5.5, duration:0.9}, '-=0.2');
+      .add(kresliNapis(1.8))
+      .to(tahyNapisu, {stroke:'#f6e3ae', strokeWidth:11, duration:0.7}, '-=0.15');
   }
 
   /* patina rezaví s posunem prstu */
@@ -1327,8 +1335,8 @@ function dilna(){
 
   /* — dějství II: písmo se píše tah po tahu a rozzáří se — */
   if (tahyNapisu.length){
-    tl.add(kresliNapis(3), 4.6)
-      .to(tahyNapisu, {stroke:'#f6e3ae', strokeWidth:5.5, duration:0.8, ease:'none'}, 7.7);
+    tl.add(kresliNapis(1.7), 4.6)
+      .to(tahyNapisu, {stroke:'#f6e3ae', strokeWidth:11, duration:0.7, ease:'none'}, 6.5);
   }
 
   /* — dějství II odchází — */
