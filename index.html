@@ -1552,11 +1552,17 @@ function galerie(){
     if (Math.abs(dx) > 12){ pohnul = true; scena.classList.add('tahne'); }
     if (pohnul) cil = Math.max(-0.4, Math.min(N-0.6, startCil - dx / rozestup()));
   });
-  function pust(){
+  function pust(e){
     if (!tahne) return;
     tahne = false;
     scena.classList.remove('tahne');
     cil = Math.max(0, Math.min(N-1, Math.round(cil)));
+    /* klik (bez tažení) vyhodnotíme tady — setPointerCapture polyká click událost */
+    if (!pohnul && e && e.type === 'pointerup'){
+      var el = document.elementFromPoint(e.clientX, e.clientY);
+      var k = el && el.closest ? el.closest('.gal-karta') : null;
+      if (k) klikNaKartu(k);
+    }
   }
   scena.addEventListener('pointerup', pust);
   scena.addEventListener('pointercancel', pust);
@@ -1586,23 +1592,20 @@ function galerie(){
 
   /* klik na dílo: dojede do středu a samo se zvětší */
   var cekejAOtevri = null;
-  karty.forEach(function(k){
-    k.addEventListener('click', function(){
-      if (pohnul) return;
-      var i = seznam.indexOf(k);
-      if (i === -1) return;
-      if (i === Math.round(cil)){ otevriLb(k); return; }
-      cil = i;
-      if (cekejAOtevri) clearInterval(cekejAOtevri);
-      cekejAOtevri = setInterval(function(){
-        if (Math.round(cil) !== i){ clearInterval(cekejAOtevri); cekejAOtevri = null; return; }
-        if (Math.abs(cur - i) < 0.06){
-          clearInterval(cekejAOtevri); cekejAOtevri = null;
-          otevriLb(k);
-        }
-      }, 80);
-    });
-  });
+  function klikNaKartu(k){
+    var i = seznam.indexOf(k);
+    if (i === -1) return;
+    if (i === Math.round(cil) && Math.abs(cur - i) < 0.2){ otevriLb(k); return; }
+    cil = i;
+    if (cekejAOtevri) clearInterval(cekejAOtevri);
+    cekejAOtevri = setInterval(function(){
+      if (Math.round(cil) !== i){ clearInterval(cekejAOtevri); cekejAOtevri = null; return; }
+      if (Math.abs(cur - i) < 0.06){
+        clearInterval(cekejAOtevri); cekejAOtevri = null;
+        otevriLb(k);
+      }
+    }, 80);
+  }
 
   /* klávesnice: šipky listují (i v lightboxu), Esc zavírá */
   var naObrazovce = false;
