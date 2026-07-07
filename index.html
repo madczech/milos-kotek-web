@@ -203,7 +203,7 @@ h2.title em{font-style:italic;color:var(--akcent);font-weight:300}
 .reveal{opacity:0;transform:translateY(40px)}
 
 /* ============ MANIFEST — mistr svého řemesla ============ */
-#manifest{height:380vh}
+#manifest{height:300vh}
 #manifest .lepka{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:hidden;text-align:center}
 #manifest .uvod{font-size:clamp(.75rem,1.5vw,.9rem);letter-spacing:.45em;text-transform:uppercase;color:var(--dim);margin-bottom:2.2rem}
 #manifest .slova{position:relative;width:100%;height:clamp(5rem,16vw,13rem)}
@@ -536,7 +536,7 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 
 /* ============ MOBIL & TABLET — dílna se stohuje, nic se neztrácí ============ */
 @media(max-width:760px){
-  #manifest{height:300vh}
+  #manifest{height:240vh}
   #manifest .portret{height:auto;width:min(80vw,58vh)}
   #manifest .veta{padding:0 1.2rem}
   .kontakt-radek{gap:.6rem}
@@ -574,8 +574,8 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 .staticky#manifest{height:auto}
 .staticky#manifest .lepka{position:relative;height:auto;padding:6rem 1.5rem}
 .staticky#manifest .slovo{display:none}
-.staticky#manifest .slovo[data-slovo="3"]{display:flex;position:relative;opacity:1}
-.staticky#manifest .slovo[data-slovo="3"] .plny{clip-path:none}
+.staticky#manifest .slovo[data-slovo="2"]{display:flex;position:relative;opacity:1}
+.staticky#manifest .slovo[data-slovo="2"] .plny{clip-path:none}
 .staticky#manifest .portret{position:relative;top:auto;left:auto;transform:none;opacity:1;height:auto;width:min(420px,80vw);margin:2rem auto}
 .staticky#dilna .ram{height:auto;overflow:visible}
 .staticky#dilna .akt{position:relative;clip-path:none!important;min-height:100vh}
@@ -611,9 +611,9 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
     <a class="mail" href="mailto:milkot@atlas.cz"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg><span class="mail-txt">milkot@atlas.cz</span></a>
   </div>
   <div class="links">
+    <a href="#galerie">Galerie</a>
     <a href="#manifest">Mistr</a>
     <a href="#dilna">Řemesla</a>
-    <a href="#galerie">Galerie</a>
     <a href="#projekty">Projekty</a>
     <a href="#zakazka">Zakázka</a>
     <a href="#cenik">Ceník</a>
@@ -624,9 +624,9 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
 </nav>
 
 <div id="mobmenu">
-  <a href="#manifest">Mistr<span class="mn">02</span></a>
-  <a href="#dilna">Řemesla<span class="mn">03</span></a>
-  <a href="#galerie">Galerie<span class="mn">06</span></a>
+  <a href="#galerie">Galerie<span class="mn">02</span></a>
+  <a href="#manifest">Mistr<span class="mn">03</span></a>
+  <a href="#dilna">Řemesla<span class="mn">04</span></a>
   <a href="#projekty">Projekty<span class="mn">07</span></a>
   <a href="#zakazka">Zakázka<span class="mn">08</span></a>
   <a href="#cenik">Ceník<span class="mn">09</span></a>
@@ -667,16 +667,60 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
   <div class="hero-scroll">vstupte do dílny</div>
 </section>
 
+<!-- 02 GALERIE -->
+<section id="galerie" data-theme="ink" data-stitek="galerie">
+  <div class="wrap">
+    <div class="kicker"><span class="num">02</span> Galerie</div>
+    <h2 class="title reveal">Projděte si<br><em>dílnu zblízka</em></h2>
+    <div class="gal-filtry reveal">
+      <button data-f="vse" class="aktivni">Vše</button>
+      <button data-f="olej">Olejomalby</button>
+      <button data-f="grafika">Grafika &amp; kresba</button>
+      <button data-f="reklama">Reklama &amp; písmo</button>
+      <button data-f="patina">Patinérské práce</button>
+    </div>
+    <div class="gal-scena" id="galScena">
+      <div class="gal-karta" data-kat="olej" data-popis="Zlatá tvář s věží — signovaný olej, jeden z vrcholů autorské tvorby."><img src="assets/malba-strazce.jpg" alt="Olejomalba — zlatá tvář s věží" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="olej" data-popis="Tvář obtočená spirálami drobných postav — akryl na černém plátně."><img src="assets/malba-spirala.jpg" alt="Malba — tvář se spirálami postav" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Akvarelová ilustrace — souboj člověka s hmyzím obrem v pusté krajině."><img src="assets/malba-akvarel.jpg" alt="Akvarel — souboj s hmyzím monstrem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="olej" data-popis="Dvě protáhlé hlavy ve výkřiku — olej na zeleném plátně."><img src="assets/malba-hlavy.jpg" alt="Olej — dvě hlavy ve výkřiku" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="reklama" data-popis="Ručně malovaný nápis Na Podskále přímo na štítu penzionu."><img src="assets/g-podskale.jpg" alt="Malovaný štít Na Podskále" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="reklama" data-popis="Heraldická orlice s monogramem — malba provedená přímo na stěnu."><img src="assets/g-orlice.jpg" alt="Nástěnná malba orlice s monogramem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="reklama" data-popis="Miloš na lešení při práci na velkoformátové nástěnné malbě."><img src="assets/g-leseni.jpg" alt="Miloš Kotek na lešení při malbě" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="reklama" data-popis="Portrét s dobovou typografií rostoucí podél schodiště."><img src="assets/g-schodiste.jpg" alt="Nástěnná malba portrétu na schodišti" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="patina" data-popis="Filmová budka zestárlá patinou tak, aby jí kamera uvěřila."><img src="assets/g-budka.jpg" alt="Filmová rekvizita — patinovaná budka" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="patina" data-popis="Zelená stříška se zlacenými ornamenty — zakázková práce z dílny."><img src="assets/g-striska.jpg" alt="Stříška se zlacenými ornamenty" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Perokresba ze skicáře — surreální tváře propletené jedním tahem."><img src="assets/g-kresba.jpg" alt="Perokresba surreálních tváří" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Dvě tváře a dětský portrét — kresba propletená jedním gestem."><img src="assets/g-tvare.jpg" alt="Kresba dvou tváří s dětským portrétem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Temná hlava vystupující ze tmy — tuš ve stylu starého hororu."><img src="assets/g-upir.jpg" alt="Tušová kresba temné hlavy" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Lučištnice v pustině — dynamická kresba tuší."><img src="assets/g-lucistnice.jpg" alt="Tušová kresba lučištnice" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Siluety strážců na věžích — ilustrace tuší plná napětí."><img src="assets/g-siluety.jpg" alt="Ilustrace siluet na věžích" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Setkání s rohatým stvořením — fantaskní kresba tužkou."><img src="assets/g-stvoreni.jpg" alt="Kresba fantaskního stvoření" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Akt u krbu — jemná kresba tužkou."><img src="assets/g-akt.jpg" alt="Kresba aktu u krbu" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Pohled do jubilejní výstavy — desítky kreseb na jednom místě."><img src="assets/g-vystava.jpg" alt="Sál jubilejní výstavy plný kreseb" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+      <div class="gal-karta" data-kat="grafika" data-popis="Miloš mezi návštěvníky své výstavy."><img src="assets/g-milos-vystava.jpg" alt="Miloš Kotek na své výstavě" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
+    </div>
+    <div class="gal-spodek">
+      <p class="gal-popis" id="galPopis"></p>
+      <div class="gal-ovladani">
+        <div class="gal-pocitadlo"><b id="galCislo">1</b> / <span id="galCelkem">12</span></div>
+        <button class="gal-sipka" id="galZpet" aria-label="Předchozí dílo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></button>
+        <button class="gal-sipka" id="galDal" aria-label="Další dílo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+    <div class="gal-napoveda">táhněte myší nebo prstem · šipky na klávesnici</div>
+  </div>
+</section>
+
 <!-- 02 MANIFEST — mistr svého řemesla -->
 <section id="manifest" data-theme="ink" data-stitek="mistr">
   <div class="lepka">
     <div class="portret" id="portret"><img src="assets/portret.jpg" alt="Miloš Kotek ve svém ateliéru, od barvy po lokty" loading="lazy" decoding="async"></div>
-    <div class="uvod">jedno jméno — čtyři řemesla</div>
+    <div class="uvod">jedno jméno — mnoho řemesel</div>
     <div class="slova">
       <div class="slovo" data-slovo="0"><span class="obrys">Malíř</span><span class="plny">Malíř</span></div>
-      <div class="slovo dlouhe" data-slovo="1"><span class="obrys">Písmomalíř</span><span class="plny">Písmomalíř</span></div>
-      <div class="slovo" data-slovo="2"><span class="obrys">Patinér</span><span class="plny">Patinér</span></div>
-      <div class="slovo" data-slovo="3"><span class="obrys">Mistr</span><span class="plny">Mistr</span></div>
+      <div class="slovo" data-slovo="1"><span class="obrys">Patinér</span><span class="plny">Patinér</span></div>
+      <div class="slovo" data-slovo="2"><span class="obrys">Mistr</span><span class="plny">Mistr</span></div>
     </div>
     <div class="veta" id="manifestVeta">Talent objevil jako kluk — <strong>a už ho nikdy nepustil.</strong></div>
     <div class="pocitadlo">od logotypů přes světelnou reklamu po autorskou tvorbu</div>
@@ -724,50 +768,7 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
   </div>
 </section>
 
-<!-- 06 GALERIE -->
-<section id="galerie" data-theme="ink" data-stitek="galerie">
-  <div class="wrap">
-    <div class="kicker"><span class="num">06</span> Galerie</div>
-    <h2 class="title reveal">Projděte si<br><em>dílnu zblízka</em></h2>
-    <div class="gal-filtry reveal">
-      <button data-f="vse" class="aktivni">Vše</button>
-      <button data-f="olej">Olejomalby</button>
-      <button data-f="grafika">Grafika &amp; kresba</button>
-      <button data-f="reklama">Reklama &amp; písmo</button>
-      <button data-f="patina">Patinérské práce</button>
-    </div>
-    <div class="gal-scena" id="galScena">
-      <div class="gal-karta" data-kat="olej" data-popis="Zlatá tvář s věží — signovaný olej, jeden z vrcholů autorské tvorby."><img src="assets/malba-strazce.jpg" alt="Olejomalba — zlatá tvář s věží" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="olej" data-popis="Tvář obtočená spirálami drobných postav — akryl na černém plátně."><img src="assets/malba-spirala.jpg" alt="Malba — tvář se spirálami postav" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="grafika" data-popis="Akvarelová ilustrace — souboj člověka s hmyzím obrem v pusté krajině."><img src="assets/malba-akvarel.jpg" alt="Akvarel — souboj s hmyzím monstrem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="olej" data-popis="Dvě protáhlé hlavy ve výkřiku — olej na zeleném plátně."><img src="assets/malba-hlavy.jpg" alt="Olej — dvě hlavy ve výkřiku" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="reklama" data-popis="Ručně malovaný nápis Na Podskále přímo na štítu penzionu."><img src="assets/g-podskale.jpg" alt="Malovaný štít Na Podskále" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="reklama" data-popis="Heraldická orlice s monogramem — malba provedená přímo na stěnu."><img src="assets/g-orlice.jpg" alt="Nástěnná malba orlice s monogramem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="reklama" data-popis="Miloš na lešení při práci na velkoformátové nástěnné malbě."><img src="assets/g-leseni.jpg" alt="Miloš Kotek na lešení při malbě" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="reklama" data-popis="Portrét s dobovou typografií rostoucí podél schodiště."><img src="assets/g-schodiste.jpg" alt="Nástěnná malba portrétu na schodišti" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="patina" data-popis="Filmová budka zestárlá patinou tak, aby jí kamera uvěřila."><img src="assets/g-budka.jpg" alt="Filmová rekvizita — patinovaná budka" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="patina" data-popis="Zelená stříška se zlacenými ornamenty — zakázková práce z dílny."><img src="assets/g-striska.jpg" alt="Stříška se zlacenými ornamenty" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="grafika" data-popis="Perokresba ze skicáře — surreální tváře propletené jedním tahem."><img src="assets/g-kresba.jpg" alt="Perokresba surreálních tváří" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="grafika" data-popis="Dvě tváře a dětský portrét — kresba propletená jedním gestem."><img src="assets/g-tvare.jpg" alt="Kresba dvou tváří s dětským portrétem" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="grafika" data-popis="Temná hlava vystupující ze tmy — tuš ve stylu starého hororu."><img src="assets/g-upir.jpg" alt="Tušová kresba temné hlavy" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="grafika" data-popis="Lučištnice v pustině — dynamická kresba tuší."><img src="assets/g-lucistnice.jpg" alt="Tušová kresba lučištnice" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="grafika" data-popis="Siluety strážců na věžích — ilustrace tuší plná napětí."><img src="assets/g-siluety.jpg" alt="Ilustrace siluet na věžích" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="grafika" data-popis="Setkání s rohatým stvořením — fantaskní kresba tužkou."><img src="assets/g-stvoreni.jpg" alt="Kresba fantaskního stvoření" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="grafika" data-popis="Akt u krbu — jemná kresba tužkou."><img src="assets/g-akt.jpg" alt="Kresba aktu u krbu" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="grafika" data-popis="Pohled do jubilejní výstavy — desítky kreseb na jednom místě."><img src="assets/g-vystava.jpg" alt="Sál jubilejní výstavy plný kreseb" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-      <div class="gal-karta" data-kat="grafika" data-popis="Miloš mezi návštěvníky své výstavy."><img src="assets/g-milos-vystava.jpg" alt="Miloš Kotek na své výstavě" loading="lazy" decoding="async" draggable="false"><span class="zaves"></span></div>
-    </div>
-    <div class="gal-spodek">
-      <p class="gal-popis" id="galPopis"></p>
-      <div class="gal-ovladani">
-        <div class="gal-pocitadlo"><b id="galCislo">1</b> / <span id="galCelkem">12</span></div>
-        <button class="gal-sipka" id="galZpet" aria-label="Předchozí dílo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></button>
-        <button class="gal-sipka" id="galDal" aria-label="Další dílo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-      </div>
-    </div>
-    <div class="gal-napoveda">táhněte myší nebo prstem · šipky na klávesnici</div>
-  </div>
-</section>
+
 
 <!-- 07 PROJEKTY -->
 <section id="projekty" data-theme="ink" data-stitek="projekty">
@@ -819,22 +820,23 @@ footer .sig{font-family:var(--hand);font-size:1.4rem;color:var(--akcent)}
       <div class="cena-karta reveal">
         <div class="typ">Obrazy</div>
         <h3>Autorská &amp; zakázková malba</h3>
-        <div class="cena">individuálně <small>dle formátu a techniky</small></div>
+        <div class="cena">od 10 000 Kč <small>dle formátu a techniky</small></div>
         <ul><li>olej, akryl, kombinovaná technika</li><li>obraz na míru interiéru</li><li>konzultace zdarma</li></ul>
       </div>
       <div class="cena-karta zvyraznena reveal">
         <div class="typ">Písmo</div>
-        <h3>Nápisy, štíty, logotypy</h3>
-        <div class="cena">dohodou <small>dle rozsahu a povrchu</small></div>
+        <h3>Písmomalířství</h3>
+        <div class="cena">od 15 000 Kč <small>dle rozsahu a povrchu</small></div>
         <ul><li>ručně malované nápisy a cedule</li><li>návrh logotypu od skici</li><li>obnova historických štítů</li></ul>
       </div>
       <div class="cena-karta reveal">
         <div class="typ">Film &amp; interiér</div>
         <h3>Patina &amp; dekorativní malba</h3>
-        <div class="cena">dle projektu <small>denní sazba / m²</small></div>
+        <div class="cena">6 000 Kč / den <small>denní sazba</small></div>
         <ul><li>patinování kulis a rekvizit</li><li>stárnutí povrchů, imitace materiálů</li><li>spolupráce s filmovými štáby</li></ul>
       </div>
     </div>
+    <p class="cenik-pozn" style="margin-top:2.5rem;max-width:62ch;margin-left:auto;margin-right:auto">Miloš Kotek také zajišťuje <strong style="color:var(--fg)">odborný dozor nad kvalitou děl ostatních</strong> — a když čas dovolí, vytváří dekorativní stěrky i autorskou výmalbu pokojů a jednacích místností.</p>
     <p class="cenik-pozn">Nezávazná poptávka nic nestojí — ozvěte se s představou a rozpočtem, zbytek doladíme spolu.</p>
   </div>
 </section>
@@ -1340,7 +1342,7 @@ function dilna(){
 function restaurovani(){
   if (!hasGsap) return;
   ScrollTrigger.create({
-    trigger:'#galerie', start:'top 75%',
+    trigger:'#projekty', start:'top 75%',
     onEnter:function(){
       tema('ink', 1.4);
       gsap.to('#koroze', {opacity:0, duration:1.6, ease:'power2.out'});
